@@ -1,0 +1,10 @@
+<!--Copyright 2020 Mark B. Skouson-->
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+<form action="/hosts/create_event" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock content %}

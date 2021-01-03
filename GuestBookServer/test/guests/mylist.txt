@@ -1,0 +1,8 @@
+#files to concatenate 
+# ffmpeg -f concat -safe 0 -i mylist.txt -c copy /opt/test/dontgit/output.mp4
+# https://trac.ffmpeg.org/wiki/Concatenate
+# https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
+file '/opt/test/dontgit/4_3_processed_151-vFkq-guest1.mp4'
+file '/opt/test/dontgit/reshaped_test.mp4'
+file '/opt/test/dontgit/4_3_processed_295-gVso-guest1.mp4'
+file '/opt/test/dontgit/reshaped_testslower.mp4'

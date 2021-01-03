@@ -1,0 +1,15 @@
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+    {% load static %}
+
+    <h2>Welcome {{ host }}</h2>
+    <h2>{{event.event_title}}  Date:{{ event.event_date }}   Time:{{ event.event_time }} </h2>
+    <h2>video from {{video.guest_name}} </h2>
+    <video width='512', height="288" controls>
+        <source src="{{ url }}" type="video/mp4">
+        Your browser doesn't support this type of video.
+    </video>
+{% endblock content %}
+
+

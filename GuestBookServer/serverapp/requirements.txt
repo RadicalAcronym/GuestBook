@@ -1,0 +1,12 @@
+Django
+django-extensions
+gunicorn
+psycopg2-binary
+pillow
+numpy
+django-allauth
+ffmpeg-python
+segno
+google-cloud-storage
+google-cloud-tasks
+protobuf

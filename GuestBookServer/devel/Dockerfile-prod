@@ -1,0 +1,49 @@
+############
+# Builder  #
+############
+
+FROM python:3.8.0 as builder
+
+# Prevent python from writing pyc files to disk
+ENV PHTHONDONTWRITEBYTECODE 1
+# Prevent python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /opt/project
+COPY . .
+
+RUN python -m pip install --upgrade pip
+
+# lint
+# RUN python -m pip install flake8
+# RUN flake8 --ignore=E501,F401
+
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /opt/project/wheels -r requirements.txt
+
+###########
+# FINAL   #
+###########
+
+FROM python:3.8.0
+
+# Prevent python from writing pyc files to disk
+ENV PHTHONDONTWRITEBYTECODE 1
+# Prevent python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/gbweb
+WORKDIR $HOME
+WORKDIR $APP_HOME
+
+RUN addgroup -S app && adduser -S app -G app
+COPY --from=builder /opt/project/wheels /wheels
+COPY --from=builder /opt/project/requirements.txt .
+RUN python -m pip install --upgrade pip
+RUN python -m pip install --no-cache /wheels/*
+
+COPY ./serverapp/ $APP_HOME
+RUN chown -R app:app $APP_HOME
+USER app
+
+ENTRYPOINT ["/opt/project/entrypoint.sh"]

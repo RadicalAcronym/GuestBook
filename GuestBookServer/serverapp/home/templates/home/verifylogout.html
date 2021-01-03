@@ -1,0 +1,26 @@
+<!--Copyright 2020 Mark B. Skouson-->
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+    {% load socialaccount %}
+    {% if user.is_authenticated %}
+        <div class="w3-display-container" style="height: 300pt">
+            <div class="w3-card-4 w3-blue w3-center w3-display-middle w3-round-large"
+                style="padding: 20pt;width: 250px"
+            >
+                <p>
+                    Are you sure you want to sign out? {{ user }}
+                </p>
+                <form method="post" action="/accounts/logout/">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">               
+                    <button type="submit">Sign Out</button>
+                </form>
+            </div>
+
+        </div>
+    {% else %}
+        <h1>Please sign in:</h1>
+        <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    {% endif %}
+
+{% endblock content %}

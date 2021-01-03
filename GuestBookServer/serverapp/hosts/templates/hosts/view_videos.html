@@ -1,0 +1,20 @@
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+    {% load static %}
+
+    <h2>Welcome {{ host }}</h2>
+    <h2>{{event.event_title}}  Date:{{ event.event_date }}   Time:{{ event.event_time }} </h2>
+    <ul>
+        {% for vgn,vid,url in thumburllist %}
+            <li>{{ vgn }} 
+                <a href="/hosts/preview_clip/{{ vid }}">
+                    <img src="{{ url }}">
+                </a>
+
+
+        {% endfor %}
+    </ul>
+{% endblock content %}
+
+
