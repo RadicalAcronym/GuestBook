@@ -50,7 +50,7 @@ class Configuration():
     MINIAUDIOBITRATE = 64000
     MINIAUDIOSAMPLERATE = 22050
 
-def process_video(cfile, pfile, tfile, mfile):
+def create_standard_thumb_mini_videos(cfile, pfile, tfile, mfile):
     """
     Converts a video to 1280x720 (16:9) format
         #other options 1290x1080 (16:9)
@@ -84,7 +84,7 @@ def process_video(cfile, pfile, tfile, mfile):
 
     #############################
     # Reshape the video and audio
-    reshape_video(ctemp,'/tmp/zptemp.mp4',config)
+    create_standard_video(ctemp,'/tmp/zptemp.mp4',config)
     abucket.blob(pfile).upload_from_filename('/tmp/zptemp.mp4')
 
     #############################
@@ -99,7 +99,7 @@ def process_video(cfile, pfile, tfile, mfile):
     abucket.blob(mfile).upload_from_filename('/tmp/zmtemp.mp4') 
     os.system('rm  /tmp/zmtemp.mp4 /tmp/zptemp.mp4')
 
-def reshape_video(infname,outfname,config):
+def create_standard_video(infname,outfname,config):
     """ Converts a video file from infame to outfname 
         as specified by c the config file
 

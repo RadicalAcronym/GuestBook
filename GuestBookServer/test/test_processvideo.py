@@ -4,7 +4,7 @@ import requests
 import os
 import json
 os.sys.path.append('..')
-from project.guests.apps import process_video
+from project.guests.apps import create_standard_thumb_mini_videos
 
 
 class TestReceiveVid(TestCase):
@@ -20,7 +20,7 @@ class TestReceiveVid(TestCase):
 
         for file in cfiles:
             print('*************', file, '**********************')
-            process_video(file, pfile, tfile, mfile)
+            create_standard_thumb_mini_videos(file, pfile, tfile, mfile)
 
         self.assertTrue(True)
         

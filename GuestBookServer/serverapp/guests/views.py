@@ -8,7 +8,7 @@ import string
 import random
 from datetime import datetime, timedelta
 import ffmpeg
-from guests.apps import process_video
+from guests.apps import create_standard_thumb_mini_videos
 from google.cloud import storage
 from google.protobuf import timestamp_pb2
 import json
@@ -93,7 +93,7 @@ def post_vid_uid(request, host_id, event_id, unique_id):
 
 
 @csrf_exempt
-def process_vid(request, host_id, event_id, unique_id,video_id):
+def process_video_non_cloud_task(request, host_id, event_id, unique_id,video_id):
     """
     (non cloud task) This receives the request from the guest to process
     the video the guest uploaded.
@@ -113,7 +113,7 @@ def process_vid(request, host_id, event_id, unique_id,video_id):
         str(host_id), str(event_id), 'orig', 
         video.video_title)
     print(cfile)
-    process_video(
+    create_standard_thumb_mini_videos(
          cfile, 
          video.processedfpname,
          video.thumbnailfpname,
@@ -199,7 +199,7 @@ def process_video_cloud_task(request):
     context = {}
     body = json.loads(request.body.decode())
     print(body['infname'])
-    process_video(
+    create_standard_thumb_mini_videos(
          body['infname'], 
          body['processedfname'],
          body['thumbfname'],

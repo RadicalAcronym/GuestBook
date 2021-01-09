@@ -20,6 +20,9 @@ import io
 
 @login_required
 def host_home(request):
+    '''
+    show the host the past and upcoming events they have scheduled
+    '''
     user = request.user
     past_events = user.event_set.filter(event_date__lt=date.today())
     sched_events = user.event_set.exclude(event_date__lt=date.today())

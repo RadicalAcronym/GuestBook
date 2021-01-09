@@ -52,8 +52,8 @@ else:
     urlpatterns += [
         path(
             '<int:host_id>/<int:event_id>/<str:unique_id>/<int:video_id>/',
-            views.process_vid,
-            name='process_vid',
+            views.process_video_non_cloud_task,
+            name='process_video_non_cloud_task',
         ),
     ]
 
