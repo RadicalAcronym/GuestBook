@@ -14,7 +14,7 @@ docker-compose up
 Then in another window you can run
 ```
 cd devel
-docker-compose run gbweb /bin/bash
+docker-compose -f docker-compose-devel.yml run gbdevel /bin/bash
 ```
 
 where you can do things like 

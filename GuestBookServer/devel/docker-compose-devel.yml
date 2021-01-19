@@ -1,0 +1,24 @@
+# Copyright 2020 Mark Skouson
+#xhost + localhost
+# when docker-compose profiles comes on-board, this may be able to reside in docker-compose.yml
+version: "3.7"
+services:
+
+  # I currently run this with
+  # docker-compose -f docker-compose-devel.yml run gbdevel /bin/bash
+  gbdevel:
+    build:
+      context: .. # Where to start the build action from
+      dockerfile: devel/Dockerfile
+      target: gbdevel # the target within the multistage build to build
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    # entrypoint: "/bin/bash"
+    # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
+    image: gbdevel:devel
+    volumes:
+      - ..:/opt
+    env_file:
+      - dontgit/envgc.dev
+
+
+  

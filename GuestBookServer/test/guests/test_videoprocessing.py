@@ -2,9 +2,8 @@
 
 import ffmpeg
 import os
-os.sys.path.append('/opt')
-from project.guests.apps import reshape_video, create_thumbnail, create_minivideo
-from project.guests.apps import Configuration
+from guests.apps import create_standard_video, create_thumbnail, create_minivideo
+from guests.apps import Configuration
 
 
 # def test_passtest():
@@ -17,7 +16,7 @@ def test_reshape_video():
     infile = '/opt/test/dontgit/frommarksphone.mp4'
     outfile = '/opt/test/dontgit/reshaped_test.mp4'
     c = Configuration()
-    reshape_video(infile,outfile,c)
+    create_standard_video(infile,outfile,c)
     probe = ffmpeg.probe(outfile)
     w = probe['streams'][0]['width']
     h = probe['streams'][0]['height']

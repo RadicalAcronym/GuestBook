@@ -3,8 +3,8 @@ from unittest import TestCase
 import requests
 import os
 import json
-os.sys.path.append('..')
-from project.guests.apps import create_standard_thumb_mini_videos
+os.sys.path.append('../serverapp')
+from guests.apps import create_standard_thumb_mini_videos
 
 
 class TestReceiveVid(TestCase):

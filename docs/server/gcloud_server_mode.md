@@ -7,7 +7,7 @@ To deploy, you can run the command from within the devel directory
 docker-compose -f docker-compose-gcsdk.yml run sdk
 ```
 
-This will start a docker container with the google cloud development kit tools. and mount your server code to the /opt/project directory within that container.
+This will start a docker container with the google cloud development kit tools. and mount your server code to the /opt/serverapp directory within that container.
 
 within the docker terminal, type
 ```
@@ -19,7 +19,7 @@ I've been picking zone us-central1-c for the zone.
 
 To deploy the app, use these commands
 ```
-cd /opt/project
+cd /opt/serverapp
 gcloud app deploy
 ```
 

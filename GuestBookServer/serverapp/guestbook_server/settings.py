@@ -161,7 +161,6 @@ STATIC_URL = os.environ.get('STATIC_URL','/static/')
 # I think BASE_DIR is the directory where manage.py is
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), 
-    # '/opt/project/media/',
 ]
 
 CSRF_COOKIE_SECURE = True

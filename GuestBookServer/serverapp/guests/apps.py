@@ -89,13 +89,13 @@ def create_standard_thumb_mini_videos(cfile, pfile, tfile, mfile):
 
     #############################
     # Create the thumbnail
-    create_thumbnail('/tmp/zptemp.mp4', 'zttemp.jpg', config)
+    create_thumbnail('/tmp/zptemp.mp4', '/tmp/zttemp.jpg', config)
     abucket.blob(tfile).upload_from_filename('/tmp/zttemp.jpg')
     os.system('rm /tmp/zttemp.jpg '+ctemp)
 
     ############################
     # Create the mini vid
-    create_minivideo('/tmp/zptemp.mp4', 'zmtemp.mp4', config)
+    create_minivideo('/tmp/zptemp.mp4', '/tmp/zmtemp.mp4', config)
     abucket.blob(mfile).upload_from_filename('/tmp/zmtemp.mp4') 
     os.system('rm  /tmp/zmtemp.mp4 /tmp/zptemp.mp4')
 
@@ -127,9 +127,9 @@ def create_standard_video(infname,outfname,config):
     v1 = ffmpeg.filter(v1.video, 'scale', -2, config.HEIGHT)
     v1 = ffmpeg.filter(v1, 'fps', fps=config.FPS)
     if wmid > config.WIDTH:
-        v1 = ffmpeg.filter(v2, 'crop', config.WIDTH, config.HEIGHT, "(in_w-out_w)/2", "(in_h-out_h)/2")
+        v1 = ffmpeg.filter(v1, 'crop', config.WIDTH, config.HEIGHT, "(in_w-out_w)/2", "(in_h-out_h)/2")
     elif wmid < config.WIDTH:
-        v1 = ffmpeg.filter(v2, 'pad', config.WIDTH, config.HEIGHT, "(out_w-in_w)/2", "(out_h-in_h)/2")
+        v1 = ffmpeg.filter(v1, 'pad', config.WIDTH, config.HEIGHT, "(out_w-in_w)/2", "(out_h-in_h)/2")
     v1 = ffmpeg.output(
         v1, a1,
         outfname,

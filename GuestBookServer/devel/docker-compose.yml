@@ -13,9 +13,7 @@ services:
     # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
     image: gbweb:devel
     volumes:
-      - ../serverapp:/opt/project
-      - ../test:/opt/test
-      - ../static:/opt/static
+      - ../serverapp:/opt/serverapp
     ports:
       - "8000:8000"
     env_file:
@@ -27,7 +25,7 @@ services:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - /Users/markskouson/OneDrive/Factory/GuestBook/GuestBookServer/serverapp:/opt/project
+      - /Users/markskouson/OneDrive/Factory/GuestBook/GuestBookServer/serverapp:/opt/serverapp
     environment:
       - POSTGRES_USER=GB
       - POSTGRES_PASSWORD=GuestBook
