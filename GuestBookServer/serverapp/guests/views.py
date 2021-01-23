@@ -33,6 +33,20 @@ def post_vid_uid(request, host_id, event_id, unique_id):
     :return:
       the direct site URL and the video id to the
       guest through a JsonResponse
+
+    The process is as follows (assuming the guest has the app and the right URL)
+    - Assume the Guest gets a url from a QR code
+    - The guest initiates a post to send the guest's name to Server
+    - Server uses guestsname to create a gcloud direct URL and sends that and 
+      the video id to the guest
+    - Guest then uploads the video to the gcloud url, and uses the video id to 
+      generate the success redirect url.  
+    - If the gcloud upload request is successful Guest is redirected to the 
+      success_action_redirect Guest created.
+    - When Server sees Guest go to the success_action_redirect site, it creates a 
+      google task to process the video to standardize format, and create a 
+      smaller version and a thumbnail picture.
+    - Once the google procesing task is kicked off, the Server returns a 200.
     """
     host = User.objects.get(id=host_id)
     event = host.event_set.get(id=event_id)
@@ -50,12 +64,12 @@ def post_vid_uid(request, host_id, event_id, unique_id):
         event.save()
         ####################################################
         # Get the guest name (to use in the filename)
-        b = request.body.decode('utf-8')
+        guestsname = request.body.decode('utf-8')
         ####################################################
         # get a direct URL
         # https://stackoverflow.com/questions/21918046/google-cloud-storage-signed-urls-with-google-app-engine?lq=1
         rand4 = ''.join(random.choices(string.ascii_letters,k=4))
-        fnamebase = str(clipnum)+'-'+rand4+'-'+b
+        fnamebase = str(clipnum)+'-'+rand4+'-'+guestsname
         video_title = fnamebase+'.video'
         cfile = os.path.join(
             str(host_id), str(event_id), 'orig', 
@@ -69,16 +83,16 @@ def post_vid_uid(request, host_id, event_id, unique_id):
         # write to the database
         pfile = os.path.join(
             str(host_id), str(event_id), 'processed', 
-            str(clipnum)+'-'+rand4+'-'+b+'.mp4')
+            str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
         tfile = os.path.join(
             str(host_id), str(event_id), 'thumbnails', 
-            str(clipnum)+'-'+rand4+'-'+b+'.jpg')
+            str(clipnum)+'-'+rand4+'-'+guestsname+'.jpg')
         mfile = os.path.join(
             str(host_id), str(event_id), 'minis', 
-            str(clipnum)+'-'+rand4+'-'+b+'.mp4')
+            str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
         v = event.video_set.create(
             video_title=video_title,
-            guest_name=b,
+            guest_name=guestsname,
             processedfpname=pfile,
             thumbnailfpname=tfile,
             minifpname = mfile,
@@ -95,10 +109,14 @@ def post_vid_uid(request, host_id, event_id, unique_id):
 @csrf_exempt
 def process_video_non_cloud_task(request, host_id, event_id, unique_id,video_id):
     """
-    (non cloud task) This receives the request from the guest to process
-    the video the guest uploaded.
-    It will call the routine to process the video.
-    return: The status of the request through a JsonResponse
+    The full video receiving and processing process is outlined in 
+    serverapp.guests.views.post_vid_uid
+
+    This is the non-cloud-task for handling success_action_redirect 
+    after Guest has uploaded a video to google cloud storage.  
+    It is used for debugging of the video processing. 
+    When this is called, the Guest will not receive a success 200 response
+    until after the video is completely processed.
     """
     print('inside non-cloud-task process video')
     host = User.objects.get(id=host_id)
@@ -124,15 +142,19 @@ def process_video_non_cloud_task(request, host_id, event_id, unique_id,video_id)
 
 
 @csrf_exempt
-def create_video_cloud_task(request, host_id, event_id, unique_id,video_id):
+def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_id):
     """
-    (first part of cloud task version of process video)
-    This receives the request from the guest to process
-    the video the guest uploaded.
-    It will put a task in the cloud task queue
+    The full video receiving and processing process is outlined in 
+    serverapp.guests.views.post_vid_uid
+
+    This handles the success_action_redirect 
+    after Guest has uploaded a video to google cloud storage.  
+
+    It kicks off a cloud task to process the video and returns
+    a success 200 to the Guest.
     return: The status of the request through a JsonResponse
     """
-    print('in create_video_cloud_task')
+    print('in process_video_create_cloud_task')
     ###############
     # verify host/event/video
     host = User.objects.get(id=host_id)
@@ -187,7 +209,7 @@ def create_video_cloud_task(request, host_id, event_id, unique_id,video_id):
 
 
 @csrf_exempt
-def process_video_cloud_task(request):
+def process_video_do_cloud_task(request):
     """
     (Part 2 of cloud task version of process video)
     This is the routine cloud tasks will call to 
@@ -195,7 +217,7 @@ def process_video_cloud_task(request):
     This will call the routine to process the video.
     return: The status of the request through a JsonResponse
     """
-    print('in process_video_cloud_task')
+    print('in process_video_do_cloud_task')
     context = {}
     body = json.loads(request.body.decode())
     print(body['infname'])

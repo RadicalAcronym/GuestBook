@@ -25,8 +25,8 @@ urlpatterns = [
     ),
     path(
         'processvideo/',
-        views.process_video_cloud_task,
-        name='process_video_cloud_task',
+        views.process_video_do_cloud_task,
+        name='process_video_do_cloud_task',
     ),
     # path(
     #     'dallinunityfilepost/',
@@ -44,8 +44,8 @@ if CLOUD_TASKS:
     urlpatterns +=  [
         path(
             '<int:host_id>/<int:event_id>/<str:unique_id>/<int:video_id>/',
-            views.create_video_cloud_task,
-            name='create_video_cloud_task',
+            views.process_video_create_cloud_task,
+            name='process_video_create_cloud_task',
         )
     ]    
 else:
