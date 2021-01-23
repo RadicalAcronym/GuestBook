@@ -28,16 +28,10 @@ urlpatterns = [
         views.process_video_do_cloud_task,
         name='process_video_do_cloud_task',
     ),
-    # path(
-    #     'dallinunityfilepost/',
-    #     views.dallinunityfilepost,
-    #     name='dallinunityfilepost',
-    # ),
 ]
 
-
-
-
+# TODO Need to find a way to obfuscate this so an untrusted person 
+# cannot guess a video_id and have the qr code and wreak havoc
 if CLOUD_TASKS in ['FALSE','False', 'false','0']:
     CLOUD_TASKS = False
 if CLOUD_TASKS:

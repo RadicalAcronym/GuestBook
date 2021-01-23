@@ -196,15 +196,15 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
 
     task['app_engine_http_request']['body'] = json.dumps(body).encode()
     timestamp = timestamp_pb2.Timestamp()
-    timestamp.FromDatetime(datetime.utcnow())
+    timestamp.FromDatetime(datetime.utcnow()) # pylint: disable=no-member
     task['schedule_time'] = timestamp
     print('just before client.create_task')
     response = client.create_task(
-        parent,
-        task,
+        parent=parent,
+        task=task,
         # timeout = 1000,
     )
-    print('in cct', response)
+    print('in cct')
     return HttpResponse(response)
 
 

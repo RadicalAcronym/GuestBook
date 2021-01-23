@@ -38,6 +38,6 @@ def test_create_minivideo():
     c = Configuration()
     create_minivideo(infile,outfile,c)
     probe = ffmpeg.probe(outfile)
-    w = probe['streams'][0]['width']
+    # w = probe['streams'][0]['width']
     h = probe['streams'][0]['height']
     assert h==c.MINIHEIGHT

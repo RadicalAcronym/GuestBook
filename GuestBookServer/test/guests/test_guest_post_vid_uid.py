@@ -4,20 +4,18 @@ import os
 import json
 import requests
 
-def test_guest_post_vid_uid_localserver():
+def test_guest_post_vid_uid():
     """
-    Test the server to make sure it can handle guest tries to submit videos.
-    The process is that the guest would get a url from the host
-    (usually through a qr code). This tests handling of that qr code.
-    The process is
-      - Check to make sure the unique ID matches 
-        the host and event
-      - Create a URL for the guest to post directly
-        to the google cloud storage location
-      - Add an entry to the database for this video
-    :return:
-      the direct site URL and the video id to the
-      guest through a JsonResponse
+    The full video receiving and processing process is outlined in 
+    serverapp.guests.views.post_vid_uid
+    
+    Test the server to make sure it can handle guest tries to submit videos
+    and process them.  
+
+    If the environment variable CLOUD_TASKS is set to True (actually not False)
+    this test will exercise the capability using cloud tasks.
+    Otherwise it will process the video on Server and and wait until the 
+    processing is done to return a response.
     """
     ###################
     # Check for a wrong url
@@ -27,12 +25,12 @@ def test_guest_post_vid_uid_localserver():
     HOSTPORT = str(8000)
     sendurl = 'http://' + HOSTNAME + ':' + HOSTPORT + '/guests/4/3/qlHxCHcgJ/post_vid/'
     with requests.Session() as s:
-        with open('/opt/test/dontgit/testclip.mov', 'rb') as img:
+        with open('/opt/GuestBook/GuestbookServer/test/dontgit/testclip.mov', 'rb') as img:
             r = s.post(sendurl, data='guest1'.encode('utf-8'), verify=False)
     assert b'Bad event url' in r._content
     ################
     # Test a get request 
-    #   Should return 
+    #   Simulate Guest initial 
     # Set up the url that would come from the qr code
     # This is for the test case set up through factoryrdlab@gmail.com
     # http://localhost:8000/guests/4/3/qlHxCHcgJo/post_vid/
@@ -44,11 +42,11 @@ def test_guest_post_vid_uid_localserver():
     ################
     # Test test 
     # Set up the url that would come from the qr code
-    # This is for the test case set up through factoryrdlab@gmail.com
+    # This is for the test case set up through event host=factoryrdlab@gmail.com
     # http://localhost:8000/guests/4/3/qlHxCHcgJo/post_vid/
     sendurl = 'http://' + HOSTNAME + ':' + HOSTPORT + '/guests/4/3/qlHxCHcgJo/post_vid/'
     with requests.Session() as s:
-        with open('/opt/test/dontgit/testclip.mov', 'rb') as img:
+        with open('/opt/GuestBook/GuestbookServer/test/dontgit/testclip.mov', 'rb') as img:
             r = s.post(sendurl, data='guest1'.encode('utf-8'), verify=False)
             content = json.loads(r.content)
 
@@ -57,7 +55,7 @@ def test_guest_post_vid_uid_localserver():
 
             successurl = 'http://' + HOSTNAME + ':' + HOSTPORT + '/guests/4/3/qlHxCHcgJo/'+str(content['vid'])+'/'
             # print(successurl)
-            with open('/opt/test/dontgit/testclip.mov', 'rb') as img:
+            with open('/opt/GuestBook/GuestbookServer/test/dontgit/testclip.mov', 'rb') as img:
                 payload = {
                     'success_action_redirect':
                         ('success_action_redirect',
