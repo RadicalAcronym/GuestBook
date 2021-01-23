@@ -45,6 +45,8 @@ FROM base1 as gbdevel
 # This is not implemented yet.  TODO when docker-compose profiles comes
 # This will be easier to implement
 RUN python -m pip install pytest
+RUN python -m pip install pylint
+RUN python -m pip install rope
 
 #####################################################
 #### build the container for the webservice
