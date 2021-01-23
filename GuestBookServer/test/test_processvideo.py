@@ -3,7 +3,7 @@ from unittest import TestCase
 import requests
 import os
 import json
-os.sys.path.append('../serverapp')
+os.sys.path.append('../project')
 from guests.apps import create_standard_thumb_mini_videos
 
 

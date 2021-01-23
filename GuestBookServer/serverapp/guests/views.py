@@ -154,7 +154,7 @@ def create_video_cloud_task(request, host_id, event_id, unique_id,video_id):
     ### GUEST = apps.get_app_config('GuestsConfig')
     project = os.environ.get('MYPROJECT', 'thinking-glass-282301')
     queue = os.environ.get('MYQUEUE', 'vidprocessor0')
-    location = os.environ.get('MYOCATION', 'us-central1')
+    location = os.environ.get('MYLOCATION', 'us-central1')
     
     client = tasks_v2.CloudTasksClient()
     # self.client = tasks_v2.CloudTasksClient.from_service_account_file('thinking-glass-282301-1175a1e8d2c6.json')

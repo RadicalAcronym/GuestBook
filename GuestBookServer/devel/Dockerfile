@@ -45,7 +45,6 @@ FROM base1 as gbdevel
 # This is not implemented yet.  TODO when docker-compose profiles comes
 # This will be easier to implement
 RUN python -m pip install pytest
-WORKDIR /opt/serverapp
 
 #####################################################
 #### build the container for the webservice
@@ -54,7 +53,7 @@ FROM base1 as gbweb
 
 COPY ./devel/entrypoint.sh /opt/setup/entrypoint.sh
 COPY ./devel/command.sh /opt/setup/command.sh
-WORKDIR /opt/serverapp
+WORKDIR /opt/project
 
 
 ENTRYPOINT ["/opt/setup/entrypoint.sh"]

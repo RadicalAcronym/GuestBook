@@ -16,9 +16,9 @@ services:
     # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
     image: gbdevel:devel
     volumes:
-      - ..:/opt
+      - ../..:/opt/GuestBook
     env_file:
-      - dontgit/envgc.dev
+      - dontgit/envdevel.dev
 
 
   
