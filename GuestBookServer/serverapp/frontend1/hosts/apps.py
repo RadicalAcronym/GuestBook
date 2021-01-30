@@ -18,4 +18,3 @@ class SignatureStitcher(AppConfig):
         print('finished with setting up SignatureStitcher')
 
 
-def combine_mini_videos(

@@ -21,13 +21,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home.urls')),
     # path('', TemplateView.as_view(
     #     template_name='home/index.html'
     # )),
-    path('home/', include('home.urls')),
-    path('hosts/', include('hosts.urls')),
-    path('guests/', include('guests.urls')),
+    path('singlevideo/', include('singlevideo.urls')),
     path('accounts/', include('allauth.urls')),
-    path('secret_url/', include('guests.urls')),
+    path('secret_url/', include('singlevideo.urls')),
 ]

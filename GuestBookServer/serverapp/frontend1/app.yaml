@@ -1,0 +1,40 @@
+
+runtime: python38
+
+instance_class: F4
+
+automatic_scaling:
+  target_cpu_utilization: 0.65
+  min_instances: 0
+  max_instances: 100
+  min_idle_instances: 0
+  max_idle_instances: 1
+  min_pending_latency: 100ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 50
+  
+env_variables:
+  DEBUG: 1
+  SECRET_KEY: vW?,N"u~Ms7[=RqXC8?5x@.[t]W8FVdH8m}(u~Mc
+  DJANGO_ALLOWED_HOSTS: thinking-glass-282301.uc.r.appspot.com [::1]
+  SQL_HOST: /cloudsql/thinking-glass-282301:us-central1:gbdb1
+  SQL_PORT: 5432
+  SQL_ENGINE: django.db.backends.postgresql
+  SQL_DATABASE: postgres
+  SQL_USER: postgres
+  SQL_PASSWORD: o40y6f37hjc9H885
+  STATIC_URL: https://storage.cloud.google.com/gb-s/static/
+  SITE_ID: 3
+  GOOGLE_APPLICATION_CREDENTIALS: thinking-glass-282301-1175a1e8d2c6.json
+  CLOUD_TASKS: True
+  MYQUEUE: vidprocessor0
+  MYPROJECT: thinking-glass-282301
+  MYLOCATION: us-central1
+
+handlers:
+  - url: /static
+    static_dir: https://storage.cloud.google.com/gb-s/static/
+    secure: always
+  - url: /.*
+    script: auto
+    secure: always

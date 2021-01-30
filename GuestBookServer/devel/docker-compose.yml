@@ -18,20 +18,21 @@ services:
       - "8000:8000"
     env_file:
       - dontgit/envgc.dev
-    depends_on:
-      - gbdb
+    # depends_on:
+    #   - gbdb
 
-  gbdb:
-    image: postgres:12.0-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - /Users/markskouson/OneDrive/Factory/GuestBook/GuestBookServer/serverapp:/opt/project
-    environment:
-      - POSTGRES_USER=GB
-      - POSTGRES_PASSWORD=GuestBook
-      - POSTGRES_DB=GB_dev
+# keep this in case we need it later, but for now using the database on gcloud
+#   gbdb:
+#     image: postgres:12.0-alpine
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       - /Users/markskouson/OneDrive/Factory/GuestBook/GuestBookServer/serverapp:/opt/project
+#     environment:
+#       - POSTGRES_USER=GB
+#       - POSTGRES_PASSWORD=GuestBook
+#       - POSTGRES_DB=GB_dev
 
 
-volumes:
-  postgres_data:
-  vid_data:
+# volumes:
+#   postgres_data:
+#   vid_data:

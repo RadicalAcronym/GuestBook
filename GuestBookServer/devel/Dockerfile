@@ -34,8 +34,10 @@ RUN apt-get update && apt-get install -y \
 
 RUN python -m pip install --upgrade pip
 WORKDIR /opt/setup
-COPY ./serverapp/requirements.txt /opt/setup/requirements.txt
+COPY ./serverapp/frontend1/requirements.txt /opt/setup/requirements.txt
 RUN python -m pip install -r requirements.txt
+# install gunicorn outside of requirements.txt since app engine has it's own
+RUN python -m pip install gunicorn
 
 #####################################################
 #### build the container to do development and test
@@ -56,6 +58,5 @@ FROM base1 as gbweb
 COPY ./devel/entrypoint.sh /opt/setup/entrypoint.sh
 COPY ./devel/command.sh /opt/setup/command.sh
 WORKDIR /opt/project
-
 
 ENTRYPOINT ["/opt/setup/entrypoint.sh"]

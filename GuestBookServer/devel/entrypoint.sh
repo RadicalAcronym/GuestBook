@@ -12,6 +12,6 @@ then
 fi
 
 # python manage.py flush --no-input
-python manage.py migrate
+python frontend1/manage.py migrate
 
 exec "$@"
