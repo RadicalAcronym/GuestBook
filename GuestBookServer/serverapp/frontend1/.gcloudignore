@@ -13,6 +13,12 @@
 .git
 .gitignore
 
+# Mac finder file
+.DS_Store
+
+# Intelij config folder
+.idea/
+
 # Python pycache:
 __pycache__/
 # Ignored by the build system

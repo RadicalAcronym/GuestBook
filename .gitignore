@@ -14,7 +14,7 @@ __pycache__/
 # Mac finder file
 .DS_Store
 
-# Jetbrains
+# Jetbrains Intelij config folder
 .idea/
 
 # Distribution / packaging
