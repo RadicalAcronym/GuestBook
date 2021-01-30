@@ -1,5 +1,5 @@
 """
-WSGI config for guestbook_server project.
+WSGI config for gb_server_backend1 project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'guestbook_server.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gb_server_backend1.settings')
 
 application = get_wsgi_application()

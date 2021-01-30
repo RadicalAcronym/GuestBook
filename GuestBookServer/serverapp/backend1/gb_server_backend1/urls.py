@@ -1,4 +1,4 @@
-"""guestbook_server URL Configuration
+"""gb_server_backend1 URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
