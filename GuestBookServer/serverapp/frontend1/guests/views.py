@@ -184,7 +184,7 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
     task = {
         'app_engine_http_request': {
             'http_method': 'POST',
-            'relative_uri': '/secret_url/processvideo/'
+            'relative_uri': '/secret_url/processvideo/',
         }
     }
     body = {
