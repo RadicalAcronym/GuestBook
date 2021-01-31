@@ -1,0 +1,40 @@
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+
+    Welcome {{ user }}
+    <h3>Past Events</h3>
+    <ul>
+        {% for event in past_events %}
+            <li>{{ event.event_date }}
+                {{ event.event_time }}
+                {{ event.event_title }}
+                <a href="/hosts/edit_event/{{ event.id }}">edit</a>
+                <a href="/hosts/get_qrcode/{{ event.id }}">QRCode</a>
+                Number of videos: {{ event.video_set.all.count }}
+                <a href="/hosts/view_videos/{{ event.id }}">View</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h3>Scheduled Events</h3>
+    <ul>
+        {% for event in sched_events %}
+            <li>{{ event.event_date }}
+                {{ event.event_time }}
+                {{ event.event_title }}
+                <a href="/hosts/edit_event/{{ event.id }}">edit</a>
+                <a href="/hosts/get_qrcode/{{ event.id }}">QRCode</a>
+                Number of videos: {{ event.video_set.all.count }}
+                <a href="/hosts/view_videos/{{ event.id }}">View</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/hosts/create_event">Create a new event</a>
+
+    <!-- <div id="progress-wrapper">
+        <button id="progress-bar-trigger">Run</button>
+        <div id="progress-bar" style="background-color: blue; width: 0%;">&nbsp;</div>
+        <div id="progress-bar-message">Waiting for progress to start...</div>
+      </div> -->
+
+{% endblock content %}

@@ -1,0 +1,138 @@
+<!--Copyright 2020 Mark B. Skouson-->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> {% block head_title %}Guest Book{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'gb_server_backend1/w3.css' %}">
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.w3-bar .w3-button {
+  padding: 5px 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navigation bar (stay on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-blue w3-card" id="mainNavbar">
+    <!-- left side -->
+    <a href="{% url 'host_home' %}" class="w3-bar-item w3-button w3-wide">
+      <i class="fa fa-home"></i>GUEST BOOK</a>
+    <!-- Right side -->
+    <div class="w3-right w3-hide-small">
+      {% if user.is_authenticated %}
+        <a class="w3-bar-item w3-button">Signed in as {{ user }}</a> 
+        <a href="{% url 'verifylogout' %}" class="w3-bar-item w3-button">Sign out</a> 
+      {% else %}
+        <a href="{% url 'mylogin' %}" class="w3-bar-item w3-button">Sign In</a>
+        <a href="{% url 'account_signup' %}" class="w3-bar-item w3-button">Create Account</a>
+      {% endif %}
+    </div>
+    <!-- Hide the right side on small screens -->
+    <a href="javascript:void()" class="w3-bar-item w3-button 
+            w3-right w3-hide-large w3-hide-medium" 
+            onclick="w3_open()">
+            <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div> <!-- Navigation bar (stay on top) -->
+
+<!-- The popout side bar  -->
+<nav class="w3-sidebar w3-bar-block w3-gray w3-card 
+            w3-animate-right w3-hide-medium 
+            w3-hide-large" style="display:none;right:0" 
+            id="Sidebar1">
+  <a href="javascript:void()" onclick="w3_close()"
+     class="w3-bar-item w3-button w3-large">Close x</a>  
+    {% if user.is_authenticated %}
+     <a class="w3-bar-item w3-button">Signed in as {{ user }}</a> 
+     <a href="{% url 'verifylogout' %}" class="w3-bar-item w3-button">Sign out</a> 
+    {% else %}
+     <a href="{% url 'mylogin' %}" class="w3-bar-item w3-button">Sign In</a>
+     <a href="{% url 'account_signup' %}" class="w3-bar-item w3-button">Create Account</a>
+    {% endif %}
+</nav>
+
+<header>
+  <div style="padding:20px"></div>
+</header>
+
+<div style="padding:30px">
+
+  {% block msg_body %}
+    {% if messages %}
+    <div class="w3-panel w3-red">
+      <h4>Messages!</h4>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endblock msg_body %}
+
+  {% block pre_authenticated_user %}
+
+
+  {% if user.is_authenticated %}
+
+
+    {% block content %}
+    {% endblock content %}
+
+    {% block extra_body %}
+    {% endblock extra_body%}
+
+  {% else %}
+    <div class="w3-display-container" style="height: 300pt" id="login">
+      <div class="w3-card-4 w3-blue w3-center 
+        w3-display-middle w3-round-large"
+        style="padding: 20pt;width: 250px"
+      >
+        <p>
+          <a href="{% url 'mylogin' %}">Sign In</a>
+        </p>
+        <p>
+          <a href="{% url 'account_signup' %}">Create Account</a>
+        </p>
+     </div>
+    </div>
+  {% endif %}
+
+
+  {% endblock pre_authenticated_user %}
+
+</div>
+
+<!-- Footer  -->
+<footer class="w3-center w3-blue w3-card">
+  <div style="padding:4px">
+    --Copyright 2020 Factory Research and Development, LLC
+  </div>
+</footer> 
+
+
+<script>
+  var sidebar1 = document.getElementById("Sidebar1")
+  function w3_open() {
+    if (sidebar1.style.display === 'block') {
+      sidebar1.style.display = 'none';
+    } else {
+      sidebar1.style.display = 'block'
+    }
+  }
+  function w3_close() {
+    sidebar1.style.display = 'none';
+  }
+</script>
+
+</body>
+
+</html>

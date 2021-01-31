@@ -16,6 +16,12 @@ import io
 import time
 
 
+@csrf_exempt
+def index(request):
+    context = {}
+    return render(request, 'home/index.html', context)
+
+
 # Create your views here.
 
 @csrf_exempt

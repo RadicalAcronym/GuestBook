@@ -1,1 +1,1 @@
-default_app_config = 'guests.apps.GuestsConfig'
+# default_app_config = 'guests.apps.GuestsConfig'

@@ -60,3 +60,14 @@ COPY ./devel/command.sh /opt/setup/command.sh
 WORKDIR /opt/project
 
 ENTRYPOINT ["/opt/setup/entrypoint.sh"]
+
+#####################################################
+#### build the container for the webservice
+#####################################################
+FROM base1 as gbwebbe1
+
+COPY ./devel/entrypoint_be1.sh /opt/setup/entrypoint.sh
+COPY ./devel/command_be1.sh /opt/setup/command.sh
+WORKDIR /opt/project
+
+ENTRYPOINT ["/opt/setup/entrypoint.sh"]

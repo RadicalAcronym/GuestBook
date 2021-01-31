@@ -6,7 +6,7 @@ import os
 
 CLOUD_TASKS = os.environ.get('CLOUD_TASKS', False)
 urlpatterns = [
-    # path('', views.index, name='index'),
+    path('', views.index, name='index'),
     path(
         'processvideo/',
         views.process_video_do_cloud_task,

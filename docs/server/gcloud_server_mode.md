@@ -20,8 +20,11 @@ I've been picking zone us-central1-c for the zone.
 To deploy the app, use these commands
 ```
 cd /opt/appserver
-gcloud app deploy frontend1/app.yaml backend1/app.yaml 
+gcloud app deploy frontend1/app.yaml backend1/app.yaml --verbosity=info
 ```
+
+I think if you only change one of the frontends or backends, you can redeploy just the subset that changed. 
+
 
 
 

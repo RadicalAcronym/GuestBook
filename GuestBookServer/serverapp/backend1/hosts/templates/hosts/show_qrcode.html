@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<h1>{{ host.host_name }}</h1>
+<h2>{{event.event_title}}  Date:{{ event.event_date }}   Time:{{ event.event_time }} </h2>
+<h2> QR Code </h2>
+
+<body>
+<p>{{ qr_text }}</p>
+
+{% load static %}
+<!-- <img src="{% static fname %}"> -->
+<img src="{{ url }}">
+
+</body>
+
+</html>
+

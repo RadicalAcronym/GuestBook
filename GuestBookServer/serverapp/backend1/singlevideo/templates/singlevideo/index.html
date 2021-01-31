@@ -1,0 +1,14 @@
+<!--Copyright 2020 Mark B. Skouson-->
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+    {% load socialaccount %}
+    {% if user.is_authenticated %}
+        <p>Welcome {{user.username}}</p>
+        <a href="hosts/host_home">View Events</a>
+        {% else %}
+        <h1>Please sign in:</h1>
+        <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    {% endif %}
+
+{% endblock content %}

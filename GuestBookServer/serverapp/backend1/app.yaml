@@ -14,13 +14,13 @@ basic_scaling:
 env_variables:
   DEBUG: 1
   SECRET_KEY: vW?,N"u~Ms7[=RqXC8?5x@.[t]W8FVdH8m}(u~Mc
-  DJANGO_ALLOWED_HOSTS: thinking-glass-282301.uc.r.appspot.com [::1]
-  # SQL_HOST: /cloudsql/thinking-glass-282301:us-central1:gbdb1
-  # SQL_PORT: 5432
-  # SQL_ENGINE: django.db.backends.postgresql
-  # SQL_DATABASE: postgres
-  # SQL_USER: postgres
-  # SQL_PASSWORD: o40y6f37hjc9H885
+  DJANGO_ALLOWED_HOSTS: gbbe1-dot-thinking-glass-282301.uc.r.appspot.com .gbbe1.thinking-glass-282301.uc.r.appspot.com [::1]
+  SQL_HOST: /cloudsql/thinking-glass-282301:us-central1:gbdb1
+  SQL_PORT: 5432
+  SQL_ENGINE: django.db.backends.postgresql
+  SQL_DATABASE: postgres
+  SQL_USER: postgres
+  SQL_PASSWORD: o40y6f37hjc9H885
   STATIC_URL: https://storage.cloud.google.com/gb-s/static/
   SITE_ID: 3
   GOOGLE_APPLICATION_CREDENTIALS: thinking-glass-282301-1175a1e8d2c6.json

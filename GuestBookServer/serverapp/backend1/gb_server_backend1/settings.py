@@ -28,7 +28,7 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
-
+print('ALLOWED_HOSTS', ALLOWED_HOSTS)
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'home',
-    'guests',
+    'singlevideo',
     'hosts',
      # for django-allauth
     'django.contrib.sites',

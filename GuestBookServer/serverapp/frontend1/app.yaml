@@ -27,7 +27,7 @@ env_variables:
   SITE_ID: 3
   GOOGLE_APPLICATION_CREDENTIALS: thinking-glass-282301-1175a1e8d2c6.json
   CLOUD_TASKS: True
-  MYQUEUE: vidprocessor0
+  MYQUEUE: singlevidformatter0
   MYPROJECT: thinking-glass-282301
   MYLOCATION: us-central1
 
