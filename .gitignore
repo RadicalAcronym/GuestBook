@@ -1,7 +1,10 @@
 GuestBookServer/devel/dontgit
-GuestBookServer/serverapp/*.json
-GuestBookServer/serverapp/app.yaml
 GuestBookServer/test/dontgit
+
+# these have private keys in them
+thinking*.json
+app.yaml
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
