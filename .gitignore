@@ -1,4 +1,7 @@
+# There are a couple of directories that we don't want to send to git
+# This one has private key stuff
 GuestBookServer/devel/dontgit
+# This one has big files
 GuestBookServer/test/dontgit
 
 # these have private keys in them
