@@ -17,20 +17,19 @@ ENV PHTHONDONTWRITEBYTECODE 1
 # Prevent python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install -y \
-   # for entrypoint shell script
-   netcat \
-   # pillow dependencies  *** I don't think we are using pillow now
-   qt5-default \
-   libwebkit2gtk-4.0-37 \
-   libxss1 \
-   iputils-ping \
-   # Psycopg2 dependencies
-   libpq-dev python3-dev \
-   # Other
-   ffmpeg \
-   # for development
-   vim curl net-tools dumb-init
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      # for entrypoint shell script
+      netcat \
+      # pillow dependencies  *** I don't think we are using pillow now
+      # qt5-default \
+      # libwebkit2gtk-4.0-37 \
+      # libxss1 \
+      # Psycopg2 dependencies
+      libpq-dev python3-dev \
+      # Other
+      ffmpeg \
+   && apt-get clean \
+   && rm -rf /var/lib/apt/lists/*
 
 RUN python -m pip install --upgrade pip
 WORKDIR /opt/setup
@@ -46,6 +45,12 @@ FROM base1 as gbdevel
 # this is a container to be used for for development and system tests
 # This is not implemented yet.  TODO when docker-compose profiles comes
 # This will be easier to implement
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      iputils-ping \
+      vim curl net-tools dumb-init \
+   && apt-get clean \
+   && rm -rf /var/lib/apt/lists/*
+
 RUN python -m pip install pytest
 RUN python -m pip install pylint
 RUN python -m pip install rope
