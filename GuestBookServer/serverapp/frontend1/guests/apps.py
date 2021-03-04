@@ -21,7 +21,9 @@ class GuestsConfig(AppConfig):
     #     location = os.environ.get('MYOCATION', 'us-central1')
         
     #     self.client = tasks_v2.CloudTasksClient()
-    #     self.client = tasks_v2.CloudTasksClient.from_service_account_file('thinking-glass-282301-1175a1e8d2c6.json')
+    #     self.client = tasks_v2.CloudTasksClient.from_service_account_file(
+    #           os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+    #     )
     #     self.parent = self.client.queue_path(project, location, queue)
     #     self.task = {
     #         'app_engine_http_request': {

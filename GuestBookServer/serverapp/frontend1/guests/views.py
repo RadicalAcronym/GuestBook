@@ -179,7 +179,7 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
     location = os.environ.get('MYLOCATION', 'us-central1')
     
     client = tasks_v2.CloudTasksClient()
-    # self.client = tasks_v2.CloudTasksClient.from_service_account_file('thinking-glass-282301-1175a1e8d2c6.json')
+    # self.client = tasks_v2.CloudTasksClient.from_service_account_file(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
     parent = client.queue_path(project, location, queue)
     task = {
         'app_engine_http_request': {

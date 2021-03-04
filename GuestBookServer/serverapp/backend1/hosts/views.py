@@ -143,7 +143,9 @@ def view_videos(request, event_id):
     thumblist = []
     # storage_client = storage.Client.from_service_account_json('thinking-glass-282301-1175a1e8d2c6.json')
     storage_client = storage.Client()
-    storage_client = storage.Client.from_service_account_json('thinking-glass-282301-1175a1e8d2c6.json')
+    storage_client = storage.Client.from_service_account_json(
+        os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+    )
     bucket = storage_client.bucket('gb-a')
     for v in event.video_set.all():
         blob = bucket.blob(v.thumbnailfpname)
