@@ -59,6 +59,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# When in debug mode (running a local webserver) turn off the csrf check
+if os.environ.get('DEBUG', 0) == 1:
+    MIDDLEWARE.remove('django.middleware.csrf.CsrfViewMiddleware')
+)
 
 ROOT_URLCONF = 'gb_server_frontend1.urls'
 
