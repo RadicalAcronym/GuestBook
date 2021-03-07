@@ -122,9 +122,9 @@ class Video(models.Model):
     )
     upload_date = models.DateField('Upload Date', default='20200101')
     upload_time = models.TimeField('Upload Time', default='12:00')
-
+    position = models.IntegerField('Position', default=0, blank=True)  
     class Meta:
-        ordering = ['upload_date', 'upload_time']
+        ordering = ['position', 'upload_date', 'upload_time']
 
     def __str__(self):
         return self.video_title
