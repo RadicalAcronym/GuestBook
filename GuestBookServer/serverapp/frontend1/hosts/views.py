@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import User, Event, Video
 from .forms import EventForm
@@ -33,6 +35,21 @@ def host_home(request):
     context = {'past_events': past_events, 'sched_events': sched_events, 'event_num_dict': event_num_dict}
     return render(request, 'hosts/hosteventlist.html', context)
 
+# This following class was a try at an alternate way to do host_home above.  In the end, it didn't
+# Seem any easier, so I quit.
+# TODO remove this
+class HostEventList(LoginRequiredMixin, ListView):
+    template_name = 'hosts/host_event_list.html'
+    model = Event
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add add the contexts
+        context['past_events'] = self.model.objects.filter(
+            user=self.request.user).filter(
+            event_date__lt=date.today())
+        context['sched_events'] = self.model.objects.exclude(event_date__lt=date.today())
+        return context
 
 @login_required
 def get_qrcode_uid(request, event_id):
@@ -159,7 +176,7 @@ def view_videos(request, event_id):
         event=event,
         thumburllist = thumblist,
     ) 
-    return render(request, 'hosts/view_videos.html', context)
+    return render(request, 'hosts/eventvideolist.html', context)
 
 @login_required
 def preview_clip(request, video_id):

@@ -30,11 +30,13 @@ class EventsInLine(admin.TabularInline):
     extra = 0
 
 
+@admin.register(User)
 class HostAdmin(admin.ModelAdmin):
     inlines = [ EventsInLine ]
 
 
-admin.site.register(User, HostAdmin)
+# This admin.site.register is the same as @admin.register above (I think)
+# admin.site.register(User, HostAdmin)
 
 
 

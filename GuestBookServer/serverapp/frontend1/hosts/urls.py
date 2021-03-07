@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
+from .views import HostEventList
 
 urlpatterns = [
     # path('', views.index, name='index'),
     path('host_home', views.host_home, name='host_home'),
+    # path('host_home2/', HostEventList.as_view()),
     path(
         'get_qrcode/<int:event_id>/',
         views.get_qrcode_uid,

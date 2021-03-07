@@ -1,0 +1,33 @@
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+    {% load static %}
+
+    <h2>Welcome {{ host }}</h2>
+    <h2>Welcome {{ host }}</h2>
+    <h2>Event:    {{event.event_title}}</h2>
+    <h3>Date:     {{ event.event_date }}</h3>
+    <h3>Time:     {{ event.event_time }}</h3>
+    <table style="width:100%">
+        <tr>
+            <th>Reorder</th>
+            <th>Clip</th>
+            <th style="text-align: left;">Guest Name</th>
+            <th>Delete Video</th>
+        </tr>
+        {% for vgn,vid,url in thumburllist %}
+        <tr>
+            <td><i class="fa fa-bars"></i></a></td>
+            <td>
+                <a href="/hosts/preview_clip/{{ vid }}">
+                    <img src="{{ url }}">
+                </a>
+            </td>
+            <td style="text-align: left;">{{ vgn }}</td>
+            <td><i class="fa fa-trash"></i></a></td>
+        </tr>
+        {% endfor %}
+        </table>
+{% endblock content %}
+
+

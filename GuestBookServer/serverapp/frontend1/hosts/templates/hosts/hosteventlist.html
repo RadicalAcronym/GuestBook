@@ -4,31 +4,55 @@
 
     Welcome {{ user }}
     <h3>Past Events</h3>
-    <ul>
+        <table style="width:100%">
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Title</th>
+            <th>QR Code</th>
+            <th># of Videos</th>
+            <th>View Videos</th>
+            <th>Edit Event</th>
+            <th>Delete event</th>
+        </tr>
         {% for event in past_events %}
-            <li>{{ event.event_date }}
-                {{ event.event_time }}
-                {{ event.event_title }}
-                <a href="/hosts/edit_event/{{ event.id }}">edit</a>
-                <a href="/hosts/get_qrcode/{{ event.id }}">QRCode</a>
-                Number of videos: {{ event.video_set.all.count }}
-                <a href="/hosts/view_videos/{{ event.id }}">View</a>
-            </li>
+        <tr>
+            <td>{{ event.event_date }}</td>
+            <td>{{ event.event_time }}</td>
+            <td>{{ event.event_title }}</td>
+            <td><a href="/hosts/get_qrcode/{{ event.id }}"><i class="fa fa-qrcode"></i></a></td>
+            <td>{{ event.video_set.all.count }}</td>
+            <td><a href="/hosts/view_videos/{{ event.id }}"><i class="fa fa-eye"></i></a></td>
+            <td><a href="/hosts/edit_event/{{ event.id }}"><i class="fa fa-edit"></i></a></td>
+            <td><i class="fa fa-trash"></i></a></td>
+        </tr>
         {% endfor %}
-    </ul>
+        </table>
     <h3>Scheduled Events</h3>
-    <ul>
+        <table style="width:100%">
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Title</th>
+            <th>QR Code</th>
+            <th># of Videos</th>
+            <th>View Videos</th>
+            <th>Edit Event</th>
+            <th>Delete event</th>
+        </tr>
         {% for event in sched_events %}
-            <li>{{ event.event_date }}
-                {{ event.event_time }}
-                {{ event.event_title }}
-                <a href="/hosts/edit_event/{{ event.id }}">edit</a>
-                <a href="/hosts/get_qrcode/{{ event.id }}">QRCode</a>
-                Number of videos: {{ event.video_set.all.count }}
-                <a href="/hosts/view_videos/{{ event.id }}">View</a>
-            </li>
+        <tr>
+            <td>{{ event.event_date }}</td>
+            <td>{{ event.event_time }}</td>
+            <td>{{ event.event_title }}</td>
+            <td><a href="/hosts/get_qrcode/{{ event.id }}"><i class="fa fa-qrcode"></i></a></td>
+            <td>{{ event.video_set.all.count }}</td>
+            <td><a href="/hosts/view_videos/{{ event.id }}"><i class="fa fa-eye"></i></a></td>
+            <td><a href="/hosts/edit_event/{{ event.id }}"><i class="fa fa-edit"></i></a></td>
+            <td><i class="fa fa-trash"></i></a></td>
+        </tr>
         {% endfor %}
-    </ul>
+        </table>
     <a href="/hosts/create_event">Create a new event</a>
 
     <!-- <div id="progress-wrapper">

@@ -159,7 +159,7 @@ def view_videos(request, event_id):
         event=event,
         thumburllist = thumblist,
     ) 
-    return render(request, 'hosts/view_videos.html', context)
+    return render(request, 'hosts/eventvideolist.html', context)
 
 @login_required
 def preview_clip(request, video_id):
