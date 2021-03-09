@@ -8,26 +8,38 @@
     <h2>Event:    {{event.event_title}}</h2>
     <h3>Date:     {{ event.event_date }}</h3>
     <h3>Time:     {{ event.event_time }}</h3>
-    <table style="width:100%">
-        <tr>
-            <th>Reorder</th>
-            <th>Clip</th>
-            <th style="text-align: left;">Guest Name</th>
-            <th>Delete Video</th>
-        </tr>
-        {% for vgn,vid,url in thumburllist %}
-        <tr>
-            <td><i class="fa fa-bars"></i></a></td>
-            <td>
-                <a href="/hosts/preview_clip/{{ vid }}">
-                    <img src="{{ url }}">
-                </a>
-            </td>
-            <td style="text-align: left;">{{ vgn }}</td>
-            <td><i class="fa fa-trash"></i></a></td>
-        </tr>
-        {% endfor %}
-        </table>
+    <table id="sortable" style="width:100%">
+        <thead>
+            <tr>
+                <th>Reorder</th>
+                <th>Clip</th>
+                <th style="text-align: left;">Guest Name</th>
+                <th>Delete Video</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vgn,vid,url in thumburllist %}
+            <tr data-pk="{{ vid.id }}" class="ui-state-default" >
+                <td  data-pk="{{ vid.id }}" style="cursor: grab;"><i class="fa fa-bars"></i></a></td> 
+                <!-- also grab move n-resize -->
+                <td>
+                    <a href="/hosts/preview_clip/{{ vid }}">
+                        <img src="{{ url }}">
+                    </a>
+                </td>
+                <td style="text-align: left;">{{ vgn }}</td>
+                <td><i class="fa fa-trash"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock content %}
 
 
+{% block extra_script %}
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+    $('tbody').sortable();
+</script>
+{% endblock extra_script %}

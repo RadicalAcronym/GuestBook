@@ -44,7 +44,7 @@ class HostEventList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add add the contexts
+        # Add contexts
         context['past_events'] = self.model.objects.filter(
             user=self.request.user).filter(
             event_date__lt=date.today())
@@ -90,7 +90,6 @@ def get_qrcode_uid(request, event_id):
     context = {'host': user, 'event': event, 'qr_text': qr_text, 'url': url}
     return render(request, 'hosts/show_qrcode.html', context)
     # return render(request, 'hosts/uploadsuccess.html', context)
-
 
 @login_required
 def create_event(request):
@@ -206,6 +205,14 @@ def preview_clip(request, video_id):
     )
     return render(request, 'hosts/preview_clip.html', context)
 
+@csrf_exempt
+def sort(self):
+    books = json.loads(self.request.POST.get('sort'))
+    for b in books:
+        book = get_object_or_404(Book, pk=int(b['pk']))
+        book.position = b['order']
+        book.save()
+    return HttpResponse('saved')
 
 
 
