@@ -2,14 +2,15 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.154.0/containers/docker-from-docker-compose
 {
 	"name": "Docker from Docker Compose GuestBookServer",
-	"dockerComposeFile": "../GuestBookServer/devel/docker-compose-devel.yml",
+	"dockerComposeFile": ["../GuestBookServer/devel/docker-compose.yml",
+		"docker-compose.yml"],
 	"service": "gbdevel",
 	"workspaceFolder": "/opt/GuestBook",
 
 	// Use this environment variable if you need to bind mount your local source code into a new container.
-	"remoteEnv": {
-		"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
-	},
+	// "remoteEnv": {
+	// 	"LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+	// },
 	
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
@@ -22,7 +23,6 @@
 		"redhat.vscode-yaml",
 		"ms-python.python"
 	],
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
