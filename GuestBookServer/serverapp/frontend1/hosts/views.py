@@ -205,14 +205,6 @@ def preview_clip(request, video_id):
     )
     return render(request, 'hosts/preview_clip.html', context)
 
-@csrf_exempt
-def sort(self):
-    books = json.loads(self.request.POST.get('sort'))
-    for b in books:
-        book = get_object_or_404(Book, pk=int(b['pk']))
-        book.position = b['order']
-        book.save()
-    return HttpResponse('saved')
 
 
 
