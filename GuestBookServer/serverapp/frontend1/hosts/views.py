@@ -16,6 +16,7 @@ import segno
 from datetime import date
 from google.cloud import storage
 import io
+import json
 
 # Create your views here.
 
@@ -156,13 +157,18 @@ def view_videos(request, event_id):
 
     ####################################################
     # get a direct URL for each thumbnail
-    thumblist = []
     # storage_client = storage.Client.from_service_account_json(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
     storage_client = storage.Client()
     storage_client = storage.Client.from_service_account_json(
         os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
     )
     bucket = storage_client.bucket('gb-a')
+    # make sure a unique sequential position number 
+    vset = event.video_set.all()
+    for i,r in enumerate(vset):
+        r.position = i
+    event.video_set.bulk_update(vset,['position'])
+    thumblist = []
     for v in event.video_set.all():
         blob = bucket.blob(v.thumbnailfpname)
         # Good for 1 minute
@@ -173,7 +179,8 @@ def view_videos(request, event_id):
     context = dict(
         host=user,
         event=event,
-        thumburllist = thumblist,
+        event_id=event_id,
+        thumburllist = thumblist
     ) 
     return render(request, 'hosts/eventvideolist.html', context)
 
@@ -205,7 +212,55 @@ def preview_clip(request, video_id):
     )
     return render(request, 'hosts/preview_clip.html', context)
 
-
-
+@login_required
+def reorder_events(request):
+    # print("inside reorder_events")
+    received_payload = json.loads(request.body)
+    # print(received_payload)
+    startrow = received_payload['startrow']-1
+    endrow = received_payload['endrow']-1
+    user = request.user
+    # Check that user owns the event
+    check = user.event_set.filter(pk=received_payload['event_id'])
+    # if doesn't own send back to host_home
+    if len(check) != 1:
+        return HttpResponseRedirect('/hosts/host_home')
+    event = check[0]
+    # TODO may be able to speed this up by seeing whether it is less to subtract rather than always adding
+    if endrow > startrow:
+        vset = event.video_set.all()[startrow:endrow+1]
+        l = vset.count()
+        # for i in range(l):
+        #     print('1a',vset[i],vset[i].position)
+        for i,r in enumerate(vset):
+            if i==0:
+                tmp = r.position
+                r.position = vset[l-1].position
+            else:
+                r.position = tmp
+                tmp +=1
+        event.video_set.bulk_update(vset,['position'])
+        # vset = event.video_set.all()[startrow:endrow+1]
+        # for i in range(l):
+        #     print('1b',vset[i],vset[i].position)
+    if endrow < startrow:
+        vset = event.video_set.all()[endrow:startrow+1]
+        l = vset.count()
+        # for i in range(l):
+        #     print('2a',vset[i],vset[i].position)
+        savepos = vset[0].position
+        tmp = savepos
+        for i,r in enumerate(vset):
+            if i==l-1:
+                r.position = savepos
+            else:
+                tmp +=1
+                r.position = tmp
+        event.video_set.bulk_update(vset,['position'])
+        # vset = event.video_set.all()[endrow:startrow+1]
+        # for i in range(l):
+        #     print('2b',vset[i],vset[i].position)
+    print('written', )
+    return HttpResponse("Success")
 
 

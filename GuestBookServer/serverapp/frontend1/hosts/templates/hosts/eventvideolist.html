@@ -42,7 +42,7 @@
 
 {% block content %}
     {% load static %}
-
+    {% csrf_token %}
     <h2>Welcome {{ host }}</h2>
     <h2>Welcome {{ host }}</h2>
     <h2>Event:    {{event.event_title}}</h2>
@@ -59,17 +59,16 @@
         </thead>
         <tbody>
             {% for vgn,vid,url in thumburllist %}
-            <tr>
-                <!-- <td class="draggable"><i class="fa fa-bars"></i></td>  -->
-                <td class="draggable"></td> 
-                <td>
-                    <a href="/hosts/preview_clip/{{ vid }}">
-                        <img src="{{ url }}">
-                    </a>
-                </td>
-                <td style="text-align: left;">{{ vgn }}</td>
-                <td><i class="fa fa-trash"></i></td>
-            </tr>
+                <tr>
+                    <td class="draggable"><i class="fa fa-arrows-v"></i></td> 
+                    <td>
+                        <a href="/hosts/preview_clip/{{ vid }}">
+                            <img src="{{ url }}">
+                        </a>
+                    </td>
+                    <td style="text-align: left;">{{ vgn }}</td>
+                    <td><i class="fa fa-trash"></i></td>
+                </tr>
             {% endfor %}
             <!-- {% for vgn,vid,url in thumburllist %}
             <tr>
@@ -89,11 +88,7 @@
 
 {% block extra_script %}
 <!-- <script src="{% static 'gb_server_frontend1/html_dom_drag.js' %}"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-    $('tbody').sortable();
-</script> -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const table = document.getElementById('table');
@@ -107,7 +102,7 @@
         // The current position of mouse relative to the dragging element
         let x = 0;
         let y = 0;
-    
+
         // Swap two nodes
         const swap = function(nodeA, nodeB) {
             const parentA = nodeA.parentNode;
@@ -178,6 +173,13 @@
             const originalRow = e.target.parentNode;
             draggingRowIndex = [].slice.call(table.querySelectorAll('tr')).indexOf(originalRow);
             // console.log(originalRow, originalRow.parentNode, table.querySelectorAll('tr'), draggingRowIndex );
+            // It may be the case that you click on the icon rather than a blank space in the cell
+            // in that case you need to get the parent's pare
+            if (draggingRowIndex == -1) {
+                const originalRow = e.target.parentNode.parentNode;
+                draggingRowIndex = [].slice.call(table.querySelectorAll('tr')).indexOf(originalRow);
+                // console.log(originalRow, originalRow.parentNode, table.querySelectorAll('tr'), draggingRowIndex );
+            }
             // Determine the mouse position
             x = e.clientX;
             y = e.clientY;
@@ -258,12 +260,26 @@
     
             // Get the end index
             const endRowIndex = [].slice.call(list.children).indexOf(draggingEle);
-    
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            obj = {event_id: "{{ event_id }}", startrow: draggingRowIndex, endrow: endRowIndex };
+            objjson = JSON.stringify(obj);
+            xmlhttp = new XMLHttpRequest();
+            // // TODO May want to do this onreadystatechange to add a delay while waiting for the reordering to be written
+            // xmlhttp.onreadystatechange = function() {
+            //     if (this.readyState == 4 && this.status == 200) {
+            //         console.log("success", draggingRowIndex, endRowIndex);
+            //     }
+            // }
+            xmlhttp.open("POST", "/hosts/reorder_events/", true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            xmlhttp.setRequestHeader("X-CSRFToken", csrftoken);
+            xmlhttp.send(objjson);
+
             isDraggingStarted = false;
     
             // Remove the `list` element
             list.parentNode.removeChild(list);
-    
+            
             // Move the dragged row to `endRowIndex`
             let rows = [].slice.call(table.querySelectorAll('tr'));
             draggingRowIndex > endRowIndex
@@ -276,6 +292,7 @@
             // Remove the handlers of `mousemove` and `mouseup`
             document.removeEventListener('mousemove', mouseMoveHandler);
             document.removeEventListener('mouseup', mouseUpHandler);
+            
         };
     
         table.querySelectorAll('tr').forEach(function(row, index) {

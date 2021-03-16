@@ -27,5 +27,11 @@ urlpatterns = [
         views.preview_clip,
         name='preview_clip',
     ),
+    # TODO: make this one only accessale when coming from the server
+    path(
+        'reorder_events/',
+        views.reorder_events,
+        name='reorder_events',
+    ),
  
 ]
