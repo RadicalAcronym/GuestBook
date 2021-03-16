@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.154.0/containers/docker-from-docker-compose
 {
 	"name": "Docker from Docker Compose GuestBookServer",
-	"dockerComposeFile": ["../GuestBookServer/devel/docker-compose.yml",
+	"dockerComposeFile": ["../GuestBookServer/devel/docker-compose-devel.yml",
 		"docker-compose.yml"],
 	"service": "gbdevel",
 	"workspaceFolder": "/opt/GuestBook",

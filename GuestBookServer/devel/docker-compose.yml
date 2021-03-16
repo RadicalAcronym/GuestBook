@@ -7,12 +7,10 @@ services:
   # server front end image
   ##################################################
   gbweb:
-    profiles: ["run", "frontend", "all"]
     build:
       context: .. # Where to start the build action from
       dockerfile: devel/Dockerfile
       target: gbweb # the target within the multistage build to build
-    # command: python manage.py runserver 0.0.0.0:8000
     command: /opt/setup/command.sh
     # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
     image: gbweb:devel
@@ -35,53 +33,6 @@ services:
 #       - POSTGRES_USER=GB
 #       - POSTGRES_PASSWORD=GuestBook
 #       - POSTGRES_DB=GB_dev
-  ##################################################
-  # A container for developing the code
-  ##################################################
-  gbwebbe1:
-    profiles: ["backend1", "all"]
-    build:
-      context: .. # Where to start the build action from
-      dockerfile: devel/Dockerfile
-      target: gbwebbe1 # the target within the multistage build to build
-    # command: python manage.py runserver 0.0.0.0:8000
-    command: /opt/setup/command.sh
-    # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
-    image: gbwebbe1:devel
-    volumes:
-      - ../serverapp:/opt/project
-    ports:
-      - "8001:8000"
-    env_file:
-      - dontgit/envgc.dev
-  ##################################################
-  # A container for developing the code
-  ##################################################
-  # I currently run this with
-  # docker-compose -f docker-compose-devel.yml run gbdevel /bin/bash
-  gbdevel:
-    profiles: ["develop", "all"]
-    build:
-      context: .. # Where to start the build action from
-      dockerfile: devel/Dockerfile
-      target: gbdevel # the target within the multistage build to build
-    # entrypoint: "/bin/bash"
-    # If you specify image as well as build, then Compose names the built image with the webapp and optional tag specified in image: webapp:tag
-    image: gbdevel:devel
-    volumes:
-      - ../..:/opt/GuestBook
-    env_file:
-      - dontgit/envdevel.dev
-  ##################################################
-  # the service to start a google cloud sdk container
-  ##################################################
-  sdk:
-    profiles: ["gcsdk", "all"]
-    image: google/cloud-sdk:latest
-    command: [/bin/bash]
-    volumes:
-      - ../:/opt/
-
 
 # volumes:
 #   postgres_data:
