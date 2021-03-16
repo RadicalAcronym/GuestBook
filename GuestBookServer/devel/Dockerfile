@@ -60,6 +60,9 @@ RUN python -m pip install rope
 #####################################################
 FROM base1 as gbweb
 
+RUN python -m pip install Werkzeug
+RUN python -m pip install pyOpenSSL
+
 COPY ./devel/entrypoint.sh /opt/setup/entrypoint.sh
 COPY ./devel/command.sh /opt/setup/command.sh
 WORKDIR /opt/project

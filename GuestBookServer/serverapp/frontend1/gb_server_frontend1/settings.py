@@ -59,9 +59,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-# When in debug mode (running a local webserver) turn off the csrf check
-if os.environ.get('DEBUG', 0) == 1:
-    MIDDLEWARE.remove('django.middleware.csrf.CsrfViewMiddleware')
 
 ROOT_URLCONF = 'gb_server_frontend1.urls'
 
@@ -166,9 +163,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), 
 ]
 
+SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-# SESSION_COOKIE_SECURE = True
 # SESSION_COOKIE_AGE = 432000 # 5d*24h*60m*60s = 432,000
 
 # this is set up for a non-standard user model
