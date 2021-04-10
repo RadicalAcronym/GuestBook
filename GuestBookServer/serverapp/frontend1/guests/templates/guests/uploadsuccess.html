@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html>
+<!--Copyright 2020 Mark B. Skouson-->
+{% extends "home/gb_base_1.html" %}
 
+{% block content %}
 <h1>{{ host.host_name }}</h1>
 
 <body>
 
-<p>Thank you for coming to our event</p>
+<p>Thank you for coming to</p>
 <p>{{event.event_title}}</p>
-<p>Yours is video #{{event.num_vid_clips}} of {{event.max_num_vid_clips}}</p>
 <ul>
-
-</body>
-
-</html>
-
+{% endblock content %}
 

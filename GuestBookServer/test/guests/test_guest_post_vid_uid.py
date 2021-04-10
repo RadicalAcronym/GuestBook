@@ -21,7 +21,7 @@ def test_guest_post_vid_uid():
     # Check for a wrong url
     HOSTNAME = 'localhost'
     # TODO be able to dynamically determine HOSTNAME depending on where running the test
-    HOSTNAME = 'host.docker.internal'  # must use this if trying to to to localhost from a docker on mac
+    HOSTNAME = 'host.docker.internal'  # must use this if trying to go to localhost from a docker on mac
     HOSTPORT = str(8000)
     sendurl = 'http://' + HOSTNAME + ':' + HOSTPORT + '/guests/4/3/qlHxCHcgJ/post_vid/'
     with requests.Session() as s:

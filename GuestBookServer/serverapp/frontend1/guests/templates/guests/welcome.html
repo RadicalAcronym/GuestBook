@@ -1,12 +1,26 @@
 <!--Copyright 2020 Mark B. Skouson-->
 {% extends "home/gb_base_1.html" %}
 
-</html><h1> Welcome to GuestBook </h1>
+{% block content %}
+{% if valid_flag %}
+    <h1> Welcome to {{ event_title }} </h1>
+    <p>If you would like to post a video for this event, please enter your name below.</p>
+    <form action={{ path }} method="post">
+        {{ form }}
+        <!-- <br>
+        <input type="file" accept="video/*" capture> -->
+        <br> <br>
+        <input type="submit" value="I'm ready to post a video!">
+    </form>
+    <p>Or, download the free app to begin</p>
+    <!-- TODO: add the download app stuff -->
+{% else %}
+    <p>{{ return_status }}</p>
+    <p> The website you attempted to visit is not for a valid event. Please try again,</p>
+    <p> or download the free app to begin.</p>
+    <!-- TODO: add the download app stuff -->
+{% endif %}
 
-<body>
 
-<p>please download the free app to begin</p>
-<!-- TODO: add the download app stuff -->
-</body>
-
+{% endblock content %}
 

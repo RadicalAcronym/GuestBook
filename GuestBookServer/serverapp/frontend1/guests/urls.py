@@ -4,7 +4,6 @@ from django.urls import path
 from . import views
 import os
 
-CLOUD_TASKS = os.environ.get('CLOUD_TASKS', False)
 urlpatterns = [
     # path('', views.index, name='index'),
     path(
@@ -32,6 +31,7 @@ urlpatterns = [
 
 # TODO Need to find a way to obfuscate this so an untrusted person 
 # cannot guess a video_id and have the qr code and wreak havoc
+CLOUD_TASKS = os.environ.get('CLOUD_TASKS', False)
 if CLOUD_TASKS in ['FALSE','False', 'false','0']:
     CLOUD_TASKS = False
 if CLOUD_TASKS:

@@ -122,7 +122,8 @@ class Video(models.Model):
     )
     upload_date = models.DateField('Upload Date', default='20200101')
     upload_time = models.TimeField('Upload Time', default='12:00')
-    position = models.IntegerField('Position', default=0, blank=True)  
+    position = models.IntegerField('Position', default=0, blank=True)
+    processed_boolean = models.BooleanField('processed_boolean', default=False)
     class Meta:
         ordering = ['position', 'upload_date', 'upload_time']
 

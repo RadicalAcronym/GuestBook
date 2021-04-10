@@ -1,0 +1,21 @@
+<!-- https://everything.curl.dev/http/multipart -->
+
+{% extends "home/gb_base_1.html" %}
+
+{% block content %}
+{% if valid_flag %}
+    <h1> Welcome to {{ event_title }} </h1>
+    <form action={{ url }} method="post" enctype="multipart/form-data">
+        <input type="hidden" name="success_action_redirect" key='success_action_redirect' value={{ success_url }}>
+        <br>
+        <input type="file" accept="video/*" name='file' capture>
+        <br>
+        <input type="submit"  value="Submit video!">
+    </form>
+{% else %}
+    <p>{{ return_status }}</p>
+    <p> The website you attempted to visit is not for a valid event. Please try again,</p>
+    <p> or download the free app to begin.</p>
+    <!-- TODO: add the download app stuff -->
+{% endif %}
+{% endblock content %}
