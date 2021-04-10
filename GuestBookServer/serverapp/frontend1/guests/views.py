@@ -163,7 +163,8 @@ def guest_welcome(request, host_id, event_id, unique_id):
           guestsname = form.cleaned_data['guest_name']
           ####################################################
           # # increment the number of clips received for this event
-          clipnum = event.num_vid_clips = event.num_vid_clips+1
+          event.num_vid_clips = event.num_vid_clips+1
+          clipnum = event.num_vid_clips
           # event.save()
           ####################################################
           # get a direct URL
@@ -198,6 +199,7 @@ def guest_welcome(request, host_id, event_id, unique_id):
               minifpname = mfile,
               upload_date=datetime.now().strftime('%Y-%m-%d'),
               upload_time=datetime.now().strftime('%H:%M'),
+              position=clipnum,
           )
           context['vid'] = v.id
           context['valid_flag'] = True
@@ -242,12 +244,12 @@ def process_video_non_cloud_task(request, host_id, event_id, unique_id,video_id)
           str(host_id), str(event_id), 'orig', 
           video.video_title)
       print(cfile)
-      # create_standard_thumb_mini_videos(
-      #      cfile, 
-      #      video.processedfpname,
-      #      video.thumbnailfpname,
-      #      video.minifpname,
-      # )
+      create_standard_thumb_mini_videos(
+           cfile, 
+           video.processedfpname,
+           video.thumbnailfpname,
+           video.minifpname,
+      )
       context['return_status'] = 'successfully processed'
       context['host'] = host
       context['event'] = event
