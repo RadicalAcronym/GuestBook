@@ -4,7 +4,7 @@ Since this `app.yaml` file has some secret information, make sure you don't have
 
 To deploy, you can run the command from within the devel directory
 ```
-docker-compose -f docker-compose-gcsdk.yml run sdk
+docker-compose -f docker-compose-devel.yml --profile gcsddk run sdk /bin/bash
 ```
 
 This will start a docker container with the google cloud development kit tools. and mount your server code to the /opt/appserver directory within that container.
