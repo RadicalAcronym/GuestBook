@@ -29,6 +29,10 @@ I think if you only change one of the frontends or backends, you can redeploy ju
 To get the tasks to be handled by the correct app serivce, see this  link
 https://cloud.google.com/tasks/docs/configuring-queues
 
+I used
+```
+gcloud tasks queues update singlevidformatter0 --routing-override=service:gbbe1
+```
 
 
 
