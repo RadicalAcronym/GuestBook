@@ -11,29 +11,6 @@ import time
 import copy
 
 
-class GuestsConfig(AppConfig):
-    name = 'guests'
-    label = 'GuestsConfig'
-
-    # def ready(self):
-    #     project = os.environ.get('MYPROJECT', None)
-    #     queue = os.environ.get('MYQUEUE', 'vidprocessor1')
-    #     location = os.environ.get('MYOCATION', 'us-central1')
-        
-    #     self.client = tasks_v2.CloudTasksClient()
-    #     self.client = tasks_v2.CloudTasksClient.from_service_account_file(
-    #           os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
-    #     )
-    #     self.parent = self.client.queue_path(project, location, queue)
-    #     self.task = {
-    #         'app_engine_http_request': {
-    #             'http_method': 'POST',
-    #             'relative_uri': '/secret_url/processvideo/'
-    #         }
-    #     }
-    #     print('***finished with setting up guests stuff')
-
-
 class Configuration():
     WIDTH = 1280 # 16*80
     HEIGHT = 720 # 9:80 
