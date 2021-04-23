@@ -1,6 +1,7 @@
 <!--Copyright 2020 Mark B. Skouson-->
 {% extends "home/gb_base_1.html" %}
 
+{% block pre_authenticated_user %}
 {% block content %}
 <h1>{{ host.host_name }}</h1>
 
@@ -10,4 +11,5 @@
 <p>{{event.event_title}}</p>
 <ul>
 {% endblock content %}
+{% endblock pre_authenticated_user %}
 

@@ -20,91 +20,91 @@ from .forms import GuestNameForm, UploadVideoForm
 
 # Create your views here.
 
-@csrf_exempt
-def post_vid_uid(request, host_id, event_id, unique_id):
-    """
-    This is the initial handler of a request from 
-    a guest to post a video.
-    It will 
-      - Check to make sure the unique ID matches 
-        the host and event
-      - Create a URL for the guest to post directly
-        to the google cloud storage location
-      - Add an entry to the database for this video
-    :return:
-      the direct site URL and the video id to the
-      guest through a JsonResponse
+# @csrf_exempt
+# def post_vid_uid(request, host_id, event_id, unique_id):
+#     """
+#     This is the initial handler of a request from 
+#     a guest to post a video.
+#     It will 
+#       - Check to make sure the unique ID matches 
+#         the host and event
+#       - Create a URL for the guest to post directly
+#         to the google cloud storage location
+#       - Add an entry to the database for this video
+#     :return:
+#       the direct site URL and the video id to the
+#       guest through a JsonResponse
 
-    The process is as follows (assuming the guest has the app and the right URL)
-    - Assume the Guest gets a url from a QR code
-    - The guest initiates a post to send the guest's name to Server
-    - Server uses guestsname to create a gcloud direct URL and sends that and 
-      the video id to the guest
-    - Guest then uploads the video to the gcloud url, and uses the video id to 
-      generate the success redirect url.  
-    - If the gcloud upload request is successful Guest is redirected to the 
-      success_action_redirect Guest created.
-    - When Server sees Guest go to the success_action_redirect site, it creates a 
-      google task to process the video to standardize format, and create a 
-      smaller version and a thumbnail picture.
-    - Once the google procesing task is kicked off, the Server returns a 200.
-    """
-    host = User.objects.get(id=host_id)
-    event = host.event_set.get(id=event_id)
-    # print(host.id, event.id, event.unique_code)
-    context = {}
-    if unique_id != event.unique_code:
-        context['return_status'] = 'Bad event url'
-        return JsonResponse(context)
+#     The process is as follows (assuming the guest has the app and the right URL)
+#     - Assume the Guest gets a url from a QR code
+#     - The guest initiates a post to send the guest's name to Server
+#     - Server uses guestsname to create a gcloud direct URL and sends that and 
+#       the video id to the guest
+#     - Guest then uploads the video to the gcloud url, and uses the video id to 
+#       generate the success redirect url.  
+#     - If the gcloud upload request is successful Guest is redirected to the 
+#       success_action_redirect Guest created.
+#     - When Server sees Guest go to the success_action_redirect site, it creates a 
+#       google task to process the video to standardize format, and create a 
+#       smaller version and a thumbnail picture.
+#     - Once the google procesing task is kicked off, the Server returns a 200.
+#     """
+#     host = User.objects.get(id=host_id)
+#     event = host.event_set.get(id=event_id)
+#     # print(host.id, event.id, event.unique_code)
+#     context = {}
+#     if unique_id != event.unique_code:
+#         context['return_status'] = 'Bad event url'
+#         return JsonResponse(context)
     
-    if request.method == 'POST':
+#     if request.method == 'POST':
 
-        ####################################################
-        # # increment the number of clips received for this event
-        clipnum = event.num_vid_clips = event.num_vid_clips+1
-        event.save()
-        ####################################################
-        # Get the guest name (to use in the filename)
-        guestsname = request.body.decode('utf-8')
-        ####################################################
-        # get a direct URL
-        # https://stackoverflow.com/questions/21918046/google-cloud-storage-signed-urls-with-google-app-engine?lq=1
-        rand4 = ''.join(random.choices(string.ascii_letters,k=4))
-        fnamebase = str(clipnum)+'-'+rand4+'-'+guestsname
-        video_title = fnamebase+'.video'
-        cfile = os.path.join(
-            str(host_id), str(event_id), 'orig', 
-            video_title)
-        abucket = storage.Client().bucket('gb-a')
-        blob = storage.Blob(cfile, abucket)
-        expiration_time = datetime.now()+timedelta(minutes=1)
-        url = blob.generate_signed_url(expiration_time, version='v4', method='POST')
-        context['url'] = url
-        ####################################################
-        # write to the database
-        pfile = os.path.join(
-            str(host_id), str(event_id), 'processed', 
-            str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
-        tfile = os.path.join(
-            str(host_id), str(event_id), 'thumbnails', 
-            str(clipnum)+'-'+rand4+'-'+guestsname+'.jpg')
-        mfile = os.path.join(
-            str(host_id), str(event_id), 'minis', 
-            str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
-        v = event.video_set.create(
-            video_title=video_title,
-            guest_name=guestsname,
-            processedfpname=pfile,
-            thumbnailfpname=tfile,
-            minifpname = mfile,
-            upload_date=datetime.now().strftime('%Y-%m-%d'),
-            upload_time=datetime.now().strftime('%H:%M'),
-        )
-        context['vid'] = v.id
-        return JsonResponse(context)
-    else:
-        context['return_status'] = 'Download the app'
-    return render(request, 'guests/welcome.html', context)
+#         ####################################################
+#         # # increment the number of clips received for this event
+#         clipnum = event.num_vid_clips = event.num_vid_clips+1
+#         event.save()
+#         ####################################################
+#         # Get the guest name (to use in the filename)
+#         guestsname = request.body.decode('utf-8')
+#         ####################################################
+#         # get a direct URL
+#         # https://stackoverflow.com/questions/21918046/google-cloud-storage-signed-urls-with-google-app-engine?lq=1
+#         rand4 = ''.join(random.choices(string.ascii_letters,k=4))
+#         fnamebase = str(clipnum)+'-'+rand4+'-'+guestsname
+#         video_title = fnamebase+'.video'
+#         cfile = os.path.join(
+#             str(host_id), str(event_id), 'orig', 
+#             video_title)
+#         abucket = storage.Client().bucket('gb-a')
+#         blob = storage.Blob(cfile, abucket)
+#         expiration_time = datetime.now()+timedelta(minutes=1)
+#         url = blob.generate_signed_url(expiration_time, version='v4', method='POST')
+#         context['url'] = url
+#         ####################################################
+#         # write to the database
+#         pfile = os.path.join(
+#             str(host_id), str(event_id), 'processed', 
+#             str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
+#         tfile = os.path.join(
+#             str(host_id), str(event_id), 'thumbnails', 
+#             str(clipnum)+'-'+rand4+'-'+guestsname+'.jpg')
+#         mfile = os.path.join(
+#             str(host_id), str(event_id), 'minis', 
+#             str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
+#         v = event.video_set.create(
+#             video_title=video_title,
+#             guest_name=guestsname,
+#             processedfpname=pfile,
+#             thumbnailfpname=tfile,
+#             minifpname = mfile,
+#             upload_date=datetime.now().strftime('%Y-%m-%d'),
+#             upload_time=datetime.now().strftime('%H:%M'),
+#         )
+#         context['vid'] = v.id
+#         return JsonResponse(context)
+#     else:
+#         context['return_status'] = 'Download the app'
+#     return render(request, 'guests/guest_welcome.html', context)
 
 
 @csrf_exempt
@@ -138,7 +138,8 @@ def guest_welcome(request, host_id, event_id, unique_id):
     """
     host = User.objects.get(id=host_id)
     event = host.event_set.get(id=event_id)
-    # print(host.id, event.id, event.unique_code)
+    print("inside guest_welcome", host.id, event.id, event.unique_code)
+    print(request.get_host())
     context = {}
     context['valid_flag'] = False
 
@@ -146,7 +147,7 @@ def guest_welcome(request, host_id, event_id, unique_id):
         context['valid_flag'] = False
         context['return_status'] = 'Bad event url.'
         context['instructions'] = "Please obtain a valid url from the event host."
-        return render(request, 'guests/welcome.html', context)
+        return render(request, 'guests/guest_welcome.html', context)
     
     if request.method == 'POST':
 
@@ -157,15 +158,13 @@ def guest_welcome(request, host_id, event_id, unique_id):
         # guestsname = guestsname.split('=', maxsplit=1)
         # print(guestsname)
         form = GuestNameForm(request.POST)
-        print(form)
         if form.is_valid():
           # print(form.cleaned_data)
           guestsname = form.cleaned_data['guest_name']
           ####################################################
           # # increment the number of clips received for this event
-          event.num_vid_clips = event.num_vid_clips+1
-          clipnum = event.num_vid_clips
-          # event.save()
+          clipnum = event.num_vid_clips = event.num_vid_clips+1
+          event.save()
           ####################################################
           # get a direct URL
           # https://stackoverflow.com/questions/21918046/google-cloud-storage-signed-urls-with-google-app-engine?lq=1
@@ -205,16 +204,20 @@ def guest_welcome(request, host_id, event_id, unique_id):
           context['valid_flag'] = True
           context['event_title'] = event.event_title
           context['form'] = UploadVideoForm()
-          context['success_url'] = f"https://localhost:8000/guests/4/3/qlHxCHcgJo/{v.id}/"
-
+          success_host = request.get_host()
+          context['success_url'] = f"https://{success_host}/guests/4/3/qlHxCHcgJo/{v.id}/"
+          print(context['success_url'])
+          print('guest_welcome post section')
           return render(request, 'guests/web_post_vid.html', context)
     else:
-        context['valid_flag'] = True
-        context['event_title'] = event.event_title
-        context['path'] = request.path
-        context['form'] = GuestNameForm()
+      print('welcome_guest get section')
+      context['valid_flag'] = True
+      context['event_title'] = event.event_title
+      context['path'] = request.path
+      context['form'] = GuestNameForm()
+      print('welcome_guest get section2')
 
-        return render(request, 'guests/welcome.html', context)
+      return render(request, 'guests/guest_welcome.html', context)
 
 
 @csrf_exempt
@@ -279,6 +282,7 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
     if not video.processed_boolean:
       video.processed_boolean = True
       context = {}
+      context['event'] = event
       if unique_id != event.unique_code:
           context['return_status'] = 'Bad event url'
           return JsonResponse(context)
@@ -290,19 +294,19 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
           video.video_title)
       ############
       # create the cloud task
-      ### # some of the stuff is pre-computed in GuestsConfig
-      ### GUEST = apps.get_app_config('GuestsConfig')
       project = os.environ.get('MYPROJECT', 'thinking-glass-282301')
-      queue = os.environ.get('MYQUEUE', 'vidprocessor0')
+      queue = os.environ.get('MYQUEUE', 'singlevidformatter0')
       location = os.environ.get('MYLOCATION', 'us-central1')
       
       client = tasks_v2.CloudTasksClient()
+      # This next line is an old way of doing things???
       # self.client = tasks_v2.CloudTasksClient.from_service_account_file(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+      # see for examples https://joncloudgeek.com/blog/managing-background-jobs-with-cloud-tasks/
       parent = client.queue_path(project, location, queue)
       task = {
           'app_engine_http_request': {
               'http_method': 'POST',
-              'relative_uri': '/secret_url/processvideo/',
+              'relative_uri': '/singlevideo/processvideo/',
           }
       }
       body = {
@@ -323,7 +327,7 @@ def process_video_create_cloud_task(request, host_id, event_id, unique_id,video_
           # timeout = 1000,
       )
       print('in cct')
-    return HttpResponse(response)
+    return render(request, 'guests/uploadsuccess.html', context)
 
 
 @csrf_exempt

@@ -2,6 +2,8 @@
 
 {% extends "home/gb_base_1.html" %}
 
+{% block pre_authenticated_user %}
+
 {% block content %}
 {% if valid_flag %}
     <h1> Welcome to {{ event_title }} </h1>
@@ -19,3 +21,4 @@
     <!-- TODO: add the download app stuff -->
 {% endif %}
 {% endblock content %}
+{% endblock pre_authenticated_user %}

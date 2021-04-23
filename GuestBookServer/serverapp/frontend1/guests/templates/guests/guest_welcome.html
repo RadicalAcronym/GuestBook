@@ -1,5 +1,6 @@
 <!--Copyright 2020 Mark B. Skouson-->
 {% extends "home/gb_base_1.html" %}
+{% block pre_authenticated_user %}
 
 {% block content %}
 {% if valid_flag %}
@@ -24,3 +25,4 @@
 
 {% endblock content %}
 
+{% endblock pre_authenticated_user %}

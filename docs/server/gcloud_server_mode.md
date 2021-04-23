@@ -26,6 +26,10 @@ gcloud app deploy frontend1/app.yaml backend1/app.yaml --verbosity=info
 I think if you only change one of the frontends or backends, you can redeploy just the subset that changed. 
 
 
+To get the tasks to be handled by the correct app serivce, see this  link
+https://cloud.google.com/tasks/docs/configuring-queues
+
+
 
 
 

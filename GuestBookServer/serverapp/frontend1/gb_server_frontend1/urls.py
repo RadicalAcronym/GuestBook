@@ -29,5 +29,5 @@ urlpatterns = [
     path('hosts/', include('hosts.urls')),
     path('guests/', include('guests.urls')),
     path('accounts/', include('allauth.urls')),
-    path('secret_url/', include('guests.urls')),
+    path('singlevideo/', include('guests.urls')),
 ]

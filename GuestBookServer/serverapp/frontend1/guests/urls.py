@@ -6,11 +6,11 @@ import os
 
 urlpatterns = [
     # path('', views.index, name='index'),
-    path(
-        '<int:host_id>/<int:event_id>/<str:unique_id>/post_vid/',
-        views.post_vid_uid,
-        name='post_vid_uid',
-    ),
+    # path(
+    #     '<int:host_id>/<int:event_id>/<str:unique_id>/post_vid/',
+    #     views.post_vid_uid,
+    #     name='post_vid_uid',
+    # ),
     # path('', views.index, name='index'),
     path(
         '<int:host_id>/<int:event_id>/<str:unique_id>/',
