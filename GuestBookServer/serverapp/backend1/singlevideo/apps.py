@@ -89,6 +89,7 @@ def create_standard_video(infname,outfname,config):
         Outputs:
           none
     """
+    # TODO chop the video if it is longer than 15 seconds to just the first 15 seconds
     #############################
     # probe for the size
     print('AAAA Probing AAAA')

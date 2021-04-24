@@ -7,12 +7,24 @@
 {% block content %}
 {% if valid_flag %}
     <h1> Welcome to {{ event_title }} </h1>
-    <form action={{ url }} method="post" enctype="multipart/form-data">
-        <input type="hidden" name="success_action_redirect" key='success_action_redirect' value={{ success_url }}>
+    Click "Choose File" below to record or upload a video.
+    Videos are limited to 15 seconds.
+    <br>
+    Videos longer than 15 seconds will be accepted but truncated to 15 seconds.
+    <br>
+
+    <form action={{ url }} method="post" enctype="multipart/form-data" onsubmit="return pleaseWait(this);" >
+        <!-- <input type="hidden" name="success_action_redirect" key='success_action_redirect' value={{ success_url }}> -->
+        {% for key, value in fields.items %}
+            <input type="hidden" name="{{ key}}" key="{{ key }}" value={{value}}> 
+        {% endfor %}
         <br>
-        <input type="file" accept="video/*" name='file' capture>
+        <label for="file">Video:</label>
+        <input type="file" accept="video/*" name="file" capture="camera" required >
         <br>
-        <input type="submit"  value="Submit video!">
+        <br>
+        <input type="submit"  name="videoSubmitButton" value="Submit video!">
+
     </form>
 {% else %}
     <p>{{ return_status }}</p>
@@ -22,3 +34,24 @@
 {% endif %}
 {% endblock content %}
 {% endblock pre_authenticated_user %}
+
+{% block extra_script %}
+
+<script type="text/javascript">
+    // https://www.the-art-of-web.com/javascript/doublesubmit/
+    function pleaseWait(form) // Submit button clicked
+    {
+      form.videoSubmitButton.disabled = true;
+      form.videoSubmitButton.value = "Please wait...";
+      return true;
+    }
+  
+    function resetForm(form) // Reset button clicked
+    {
+      form.videoSubmitButton.disabled = false;
+      form.videoSubmitButton.value = "Submit";
+    }
+  
+  </script>
+
+{% endblock extra_script %}

@@ -7,6 +7,7 @@ import string
 import random
 from datetime import datetime, timedelta
 import ffmpeg
+import urllib
 from guests.apps import create_standard_thumb_mini_videos
 from hosts.models import User, Event
 from google.cloud import storage
@@ -15,7 +16,7 @@ import json
 from google.cloud import tasks_v2
 import io
 import time
-from .forms import GuestNameForm, UploadVideoForm
+from .forms import GuestNameForm
 
 
 # Create your views here.
@@ -159,8 +160,8 @@ def guest_welcome(request, host_id, event_id, unique_id):
         # print(guestsname)
         form = GuestNameForm(request.POST)
         if form.is_valid():
-          # print(form.cleaned_data)
-          guestsname = form.cleaned_data['guest_name']
+          print("form is valid. ", form.cleaned_data)
+          guestsname = urllib.parse.quote(form.cleaned_data['guest_name'])
           ####################################################
           # # increment the number of clips received for this event
           clipnum = event.num_vid_clips = event.num_vid_clips+1
@@ -174,12 +175,8 @@ def guest_welcome(request, host_id, event_id, unique_id):
           cfile = os.path.join(
               str(host_id), str(event_id), 'orig', 
               video_title)
-          abucket = storage.Client().bucket('gb-a')
-          blob = storage.Blob(cfile, abucket)
           expiration_time = datetime.now()+timedelta(minutes=5)
-          url = blob.generate_signed_url(expiration_time, version='v4', method='POST')
-          context['url'] = url
-          ####################################################
+         ####################################################
           # write to the database
           pfile = os.path.join(
               str(host_id), str(event_id), 'processed', 
@@ -203,10 +200,35 @@ def guest_welcome(request, host_id, event_id, unique_id):
           context['vid'] = v.id
           context['valid_flag'] = True
           context['event_title'] = event.event_title
-          context['form'] = UploadVideoForm()
           success_host = request.get_host()
-          context['success_url'] = f"https://{success_host}/guests/4/3/qlHxCHcgJo/{v.id}/"
-          print(context['success_url'])
+          success_url = f"https://{success_host}/guests/4/3/qlHxCHcgJo/{v.id}/"
+          print(success_url)
+          #### old way of doing signed_url that couldn't figure how to limit file size
+          abucket = storage.Client().bucket('gb-a')
+          blob = storage.Blob(cfile, abucket)
+          url = blob.generate_signed_url(expiration_time, version='v4', method='POST')
+          context['url'] = url
+          print(url)
+          #### New way of doing signed url limit the file size
+          # https://googleapis.dev/python/storage/latest/client.html
+          # https://googleapis.dev/python/storage/latest/blobs.html
+          # https://cloud.google.com/storage/docs/xml-api/post-object-forms
+          client = storage.Client()
+          policy = client.generate_signed_post_policy_v4(
+            'gb-a',
+            cfile,
+            expiration = expiration_time,
+            conditions = [
+              ["content-length-range", 0, 25000000] #25M
+            ],
+            fields = {
+              'success_action_redirect' : success_url,
+            }
+          )
+          print(policy)
+          # policy has 2 keys: url and fields. include them both
+          context['url'] = policy["url"]
+          context['fields'] = policy['fields']
           print('guest_welcome post section')
           return render(request, 'guests/web_post_vid.html', context)
     else:
