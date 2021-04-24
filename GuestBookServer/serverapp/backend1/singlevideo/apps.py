@@ -89,7 +89,6 @@ def create_standard_video(infname,outfname,config):
         Outputs:
           none
     """
-    # TODO chop the video if it is longer than 15 seconds to just the first 15 seconds
     #############################
     # probe for the size
     print('AAAA Probing AAAA')
@@ -127,6 +126,8 @@ def create_standard_video(infname,outfname,config):
         ac=2,
         crf=config.CRF,
         preset=config.ENCSPEED_COMPRESS_RATIO, 
+        ss=0,
+        t=15,
     )
     v1 = ffmpeg.overwrite_output(v1)
     print('AAAA starting resizing AAAA')
