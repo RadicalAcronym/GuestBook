@@ -89,6 +89,7 @@ def create_standard_video(infname,outfname,config):
         Outputs:
           none
     """
+    # TODO chop the video if it is longer than 15 seconds to just the first 15 seconds
     #############################
     # probe for the size
     print('AAAA Probing AAAA')
@@ -96,9 +97,15 @@ def create_standard_video(infname,outfname,config):
     print('ZZZZ Probing ZZZZ')
     win = probe['streams'][0]['width']
     hin = probe['streams'][0]['height']
+    rotation = abs(int(probe['streams'][0]['tags'].get('rotate',0)))
+    if rotation==90 or rotation==270:
+        tmp = win
+        win = hin
+        hin = tmp
     # compute what the scaled width will be
     wmid = (win/hin*config.HEIGHT)//2*2
-    # print(win,hin,wmid)
+    print(win,hin,wmid)
+    print(probe['streams'][0])
     #############################
     # Graph for video process
     v1 = ffmpeg.input(infname)
