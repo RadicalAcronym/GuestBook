@@ -161,7 +161,8 @@ def guest_welcome(request, host_id, event_id, unique_id):
         form = GuestNameForm(request.POST)
         if form.is_valid():
           print("form is valid. ", form.cleaned_data)
-          guestsname = urllib.parse.quote(form.cleaned_data['guest_name'])
+          guestsname = form.cleaned_data['guest_name']
+          guestsname_urlsafe = urllib.parse.quote(guestsname)
           ####################################################
           # # increment the number of clips received for this event
           clipnum = event.num_vid_clips = event.num_vid_clips+1
@@ -170,7 +171,7 @@ def guest_welcome(request, host_id, event_id, unique_id):
           # get a direct URL
           # https://stackoverflow.com/questions/21918046/google-cloud-storage-signed-urls-with-google-app-engine?lq=1
           rand4 = ''.join(random.choices(string.ascii_letters,k=4))
-          fnamebase = str(clipnum)+'-'+rand4+'-'+guestsname
+          fnamebase = str(clipnum)+'-'+rand4+'-'+guestsname_urlsafe
           video_title = fnamebase+'.video'
           cfile = os.path.join(
               str(host_id), str(event_id), 'orig', 
@@ -180,13 +181,13 @@ def guest_welcome(request, host_id, event_id, unique_id):
           # write to the database
           pfile = os.path.join(
               str(host_id), str(event_id), 'processed', 
-              str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
+              str(clipnum)+'-'+rand4+'-'+guestsname_urlsafe+'.mp4')
           tfile = os.path.join(
               str(host_id), str(event_id), 'thumbnails', 
-              str(clipnum)+'-'+rand4+'-'+guestsname+'.jpg')
+              str(clipnum)+'-'+rand4+'-'+guestsname_urlsafe+'.jpg')
           mfile = os.path.join(
               str(host_id), str(event_id), 'minis', 
-              str(clipnum)+'-'+rand4+'-'+guestsname+'.mp4')
+              str(clipnum)+'-'+rand4+'-'+guestsname_urlsafe+'.mp4')
           v = event.video_set.create(
               video_title=video_title,
               guest_name=guestsname,
